@@ -16,9 +16,9 @@
 
 /* Logo */
 .header .logo {
-    max-height: 50px;
-    width: auto;
-}
+    height: 60px;
+    margin: 10px;
+  }
 
 /* Navigation Menü */
 .nav {

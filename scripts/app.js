@@ -1,24 +1,18 @@
-import { renderHeader } from "./components/header.js";
-import { renderFooter } from "./components/footer.js";
-import { renderMainContent, initializeMainContentEvents } from "./components/main.js";
+import { loadHeader } from "./components/header.js";
+import { loadFooter } from "./components/footer.js";
+import { loadMainContent } from "./components/main.js";
 
-// Ana container
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM tamamen yüklendi ve uygulama başlatıldı.");
 
   const app = document.getElementById("app");
 
-  // Header
-  const headerHTML = renderHeader();
-  app.insertAdjacentHTML("beforeend", headerHTML);
+  const headerHTML = loadHeader();
+  app.insertAdjacentHTML("afterbegin", headerHTML);
 
-  // Main Content
-  const mainContentHTML = renderMainContent();
-  app.insertAdjacentHTML("beforeend", mainContentHTML);
-  initializeMainContentEvents();
+  loadMainContent();
 
-  // Footer
-  const footerHTML = renderFooter();
+  const footerHTML = loadFooter();
   app.insertAdjacentHTML("beforeend", footerHTML);
 });
 

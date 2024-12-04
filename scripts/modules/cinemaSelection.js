@@ -1,130 +1,82 @@
-// /scripts/modules/cinemaSelection.js
-import { cineGroupInfo, cinemas } from "../data/Cinema.js";
+import { cinemas } from "../data/Cinema.js";
 import { loadHeader } from "../components/header.js";
-import { startReservation } from "../modules/reservationHandler.js";
+import { loadMainContent } from "../components/main.js";
 import { setupContactHamburgerMenu } from "../components/contactHamburger.js";
-import "../styles/modules/cinemaSelection.css";
+import { cineGroupInfo } from "../data/cineGroupInfo.js";
+import { startReservation } from "../modules/reservationHandler.js";
 
-/**
- * Sinema Seçimi Yapıldığında Çalışır
- * @param {number} cinemaId - Seçilen sinema ID'si
- */
-export function selectCinema(cinemaId) {
-  const cinema = cinemas.find((c) => c.id === cinemaId);
+export function getSelectedCinema() {
+  const storedCinema = localStorage.getItem("selectedCinema");
+  return storedCinema ? JSON.parse(storedCinema) : cineGroupInfo; // Varsayılan bilgiyi döndür
+}
 
-  if (!cinema) {
-    console.error(`Cinema with ID ${cinemaId} not found.`);
+export function setupMainContent(cinema = null) {
+  const mainContent = document.getElementById("main-content");
+  if (!mainContent) return;
+
+  cinema = cinema || getSelectedCinema();
+
+  if (!cinema || !cinema.name) {
+    mainContent.innerHTML = `
+      <h2>Sinema Bilgisi Bulunamadı</h2>
+      <p>Lütfen bir sinema seçiniz.</p>
+    `;
     return;
   }
 
-  // Seçilen sinemayı kaydet
-  localStorage.setItem("selectedCinema", JSON.stringify(cinema));
-
-  // Header ve Main Content güncelle
-  loadHeader(cinema);
-  setupMainContent(cinema);
-  setupContactHamburgerMenu();
-}
-
-/**
- * LocalStorage'dan Seçili Sinemayı Alır
- * @returns {object} Seçili Sinema veya Varsayılan Grup Bilgisi
- */
-export function getSelectedCinema() {
-  const storedCinema = localStorage.getItem("selectedCinema");
-  return storedCinema ? JSON.parse(storedCinema) : cineGroupInfo;
-}
-
-/**
- * Main Content Alanını Dinamik Olarak Günceller
- * @param {object} cinema - Seçilen Sinema Nesnesi
- */
-export function setupMainContent(cinema) {
-  const mainContent = document.getElementById("main-content");
-
-  if (!mainContent) return;
-
-  // Varsayılan sinema bilgisi kullan
-  cinema = cinema || getSelectedCinema();
-
   mainContent.innerHTML = `
-    ${
-      cinema.name
-        ? `
-        <div class="cinema-details">
-          <h2>Willkommen bei ${cinema.name}</h2>
-          <p>${cinema.description}</p>
-          <div class="cinema-actions">
-              <button id="startReservationButton" class="btn-primary">Buchen oder Reservieren</button>
-              <button id="toMainPageButton" class="btn-secondary">Zurück zur Startseite</button>
-          </div>
-        </div>
-      `
-        : `
-        <div class="group-info">
-          <h2>${cineGroupInfo.title}</h2>
-          <p>${cineGroupInfo.description}</p>
-          <div class="cinema-actions">
-              ${cinemas
-                .map(
-                  (cinema) =>
-                    `<button class="btn-primary cinema-select" data-id="${cinema.id}">${cinema.name}</button>`
-                )
-                .join("")}
-          </div>
-        </div>
-      `
-    }
+    <div class="cinema-details">
+      <h2>Willkommen bei ${cinema.name}</h2>
+      <p>${cinema.description}</p>
+      <div class="cinema-actions">
+        <button id="startFilmSelection" class="btn-primary">Film Seçimi</button>
+        <button id="toMainPageButton" class="btn-secondary">Geri Dön</button>
+      </div>
+    </div>
   `;
 
-  // Main content arka plan ayarları
-  mainContent.style.backgroundImage = `url('${
-    cinema.backgroundImage || "../../assets/cinema/default-bg.jpg"
-  }')`;
+  mainContent.style.backgroundImage = `url('${cinema.backgroundImage || "./assets/cinema/default-bg.jpg"}')`;
   mainContent.style.backgroundSize = "cover";
   mainContent.style.backgroundPosition = "center";
-  mainContent.style.backgroundAttachment = "fixed";
-  mainContent.style.transition = "background-image 0.5s ease-in-out";
-  mainContent.style.minHeight = "500px"; // Minimum yükseklik
+  mainContent.style.minHeight = "500px";
 
-  // Dinamik sinema seçimi için butonları bağla
-  setupCinemaSelection();
+  const startFilmSelectionButton = document.getElementById("startFilmSelection");
+  if (startFilmSelectionButton) {
+    startFilmSelectionButton.addEventListener("click", () => {
+      console.log("Film seçim ekranına geçiliyor...");
+      startReservation(cinema.id); // Doğru değişken adı kullanıldı
+    });
+  }
 
   const toMainPageButton = document.getElementById("toMainPageButton");
   if (toMainPageButton) {
     toMainPageButton.addEventListener("click", () => {
+      console.log("Ana sayfaya dönülüyor...");
       localStorage.removeItem("selectedCinema");
-      loadHeader(); // Varsayılan header
-      setupMainContent(cineGroupInfo); // Varsayılan içerik
-      setupContactHamburgerMenu(); // Varsayılan menü
-    });
-  }
-
-  // Rezervasyon başlatma butonuna event listener ekle
-  const startReservationButton = document.getElementById("startReservationButton");
-  if (startReservationButton) {
-    startReservationButton.addEventListener("click", () => {
-      if (cinema) {
-        console.log(`Reservation started for cinema: ${cinema.name}`);
-        startReservation(cinema.id); // Rezervasyonu başlat
-      } else {
-        console.error("No cinema selected for reservation.");
-      }
+      loadMainContent();
+      loadHeader();
+      setupContactHamburgerMenu();
     });
   }
 }
 
-/**
- * Sinema Seçim Butonlarını Ayarlar
- */
-function setupCinemaSelection() {
-  document.querySelectorAll(".cinema-select").forEach((button) =>
-    button.addEventListener("click", (e) => {
-      const cinemaId = e.target.dataset.id;
-      if (cinemaId) {
-        selectCinema(parseInt(cinemaId)); // Sinema seçimi
-      }
-    })
-  );
+function loadFilmSelection(cinema) {
+  const mainContent = document.getElementById("main-content");
+  if (!mainContent) return;
+
+  mainContent.innerHTML = `
+    <h2>Film Seçimi - ${cinema.name}</h2>
+    <div class="film-selection">
+      <p>Film seçim ekranı burada görünecek...</p>
+    </div>
+    <button id="backToCinemaDetails" class="btn-secondary">Geri Dön</button>
+  `;
+
+  const backToCinemaDetailsButton = document.getElementById("backToCinemaDetails");
+  if (backToCinemaDetailsButton) {
+    backToCinemaDetailsButton.addEventListener("click", () => {
+      console.log("Sinema detaylarına geri dönülüyor...");
+      setupMainContent(cinema);
+    });
+  }
 }
-console.log(cinema.backgroundImage)

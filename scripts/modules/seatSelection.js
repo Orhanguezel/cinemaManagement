@@ -1,8 +1,8 @@
-import { getCinemaSalons } from "../data/filmsData.js";
-import { cinemas } from "../data/cinemas.js";
-import { showModal, closeModal } from "./modal.js";
+import { cinemas } from "../data/Cinema.js";
+import { getCinemaSalons } from "../data/data.js";
+import { showModal, closeModal } from "./modalHandler.js";
 import { setCart, getCart } from "./checkoutHandler.js";
-import { showCartModal } from "./paymentHandler.js";
+import { showCartModal } from "./paymentProcessing.js";
 
 const DISCOUNTS = {
   child: 0.3,
@@ -11,6 +11,7 @@ const DISCOUNTS = {
 
 const PUBLIC_DAYS = ["Monday", "Wednesday"];
 
+// Seat class
 class Seat {
   constructor(row, number, occupied = false) {
     this.row = row;
@@ -44,6 +45,7 @@ class Seat {
   }
 }
 
+// Seat Manager
 class SeatManager {
   constructor(container) {
     this.container = container;
@@ -85,6 +87,7 @@ class SeatManager {
   }
 }
 
+// Main seat selection function
 export function showSeatSelection(cinemaId, salonId, selectedDate, selectedTime) {
   const cinema = cinemas.find((c) => c.id === cinemaId);
   if (!cinema) {
@@ -132,6 +135,7 @@ export function showSeatSelection(cinemaId, salonId, selectedDate, selectedTime)
   });
 }
 
+// Summary of selected seats
 function showSeatSummary(selectedSeats, cinema, salon, selectedDate, selectedTime) {
   const modalContent = `
       <h3>Ausgewählte Plätze:</h3>
@@ -148,6 +152,7 @@ function showSeatSummary(selectedSeats, cinema, salon, selectedDate, selectedTim
   });
 }
 
+// Customer details input
 function enterDetails(selectedSeats, cinema, salon, selectedDate, selectedTime) {
   const modalContent = `
       <h3>Kundendetails</h3>
@@ -214,6 +219,7 @@ function enterDetails(selectedSeats, cinema, salon, selectedDate, selectedTime) 
   });
 }
 
+// Payment modal
 function showPaymentModal() {
   const cart = getCart();
   if (cart.length === 0) {

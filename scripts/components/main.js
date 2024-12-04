@@ -1,8 +1,10 @@
 import { cinemas } from "../data/Cinema.js";
-import { startReservation } from "../data/Reservation.js";
+import { getSelectedCinema, setupMainContent } from "../modules/cinemaSelection.js"; // Güncel import
+import { loadHeader } from "./header.js";
 
-export function renderMainContent() {
-  // Dinamik olarak grid öğeleri oluşturuyoruz
+export function loadMainContent() {
+  const selectedCinema = getSelectedCinema(); // Seçili sinemayı al
+
   const gridElements = [
     { id: "hamburger-menu", className: "grid-hamburger-menu", content: "Hamburger Menu" },
     { id: "header-logo", className: "header-logo", content: "Logo" },
@@ -11,17 +13,21 @@ export function renderMainContent() {
     {
       id: "main-content",
       className: "main-content",
-      content: createCinemaDropdown(), // Açılır menü burada ekleniyor
+      content: createCinemaDropdown(),
     },
-    { id: "top-section", className: "top-section", content: "Top Section" },
+    {
+      id: "top-section",
+      className: "top-section",
+      content: selectedCinema ? createTopSection(selectedCinema) : "Top Section",
+    },
     { id: "about-section", className: "grid-about", content: "About uns Section" },
     { id: "movie-section", className: "grid-movie", content: "Movie Section" },
     { id: "blog-section", className: "grid-blog", content: "Blog Section" },
     { id: "footer", className: "grid-footer", content: "Footer" },
   ];
 
-  // HTML yapısını döndür
-  return `
+  const app = document.getElementById("app");
+  app.innerHTML = `
     <div class="grid-container">
       ${gridElements
         .map(
@@ -34,9 +40,10 @@ export function renderMainContent() {
         .join("")}
     </div>
   `;
+
+  initializeMainContentEvents();
 }
 
-// Sinema seçim açılır menüsünü oluşturan fonksiyon
 function createCinemaDropdown() {
   return `
     <h2>Wählen Sie ein Kino aus:</h2>
@@ -55,24 +62,33 @@ function createCinemaDropdown() {
   `;
 }
 
-// Başlangıç olay dinleyicisi
 export function initializeMainContentEvents() {
   const dropdownButton = document.getElementById("cinema-dropdown-button");
   const dropdownMenu = document.getElementById("cinema-dropdown-menu");
 
-  // Açılır menüyü göster/gizle
   dropdownButton.addEventListener("click", () => {
     dropdownMenu.classList.toggle("show");
   });
 
-  // Dropdown öğelerine tıklama
   dropdownMenu.addEventListener("click", (event) => {
     if (event.target.classList.contains("dropdown-item")) {
       const cinemaId = parseInt(event.target.dataset.id, 10);
-      console.log(`Seçilen Sinema ID: ${cinemaId}`); // Konsola yazdır
-      startReservation(cinemaId); // Rezervasyonu başlat
+      console.log(`Seçilen Sinema ID: ${cinemaId}`);
+      const selectedCinema = cinemas.find((c) => c.id === cinemaId); // Seçilen sinema
+      if (selectedCinema) {
+        setupMainContent(selectedCinema);
+        loadHeader(selectedCinema); // Header'ı güncelle
+      }
     }
   });
+}
 
-  console.log("Dropdown olay dinleyicileri başarıyla yüklendi.");
+function createTopSection(cinema) {
+  return `
+    <div class="top-section-content">
+      <h2>${cinema.name}</h2>
+      <p>${cinema.address}</p>
+      <p>Telefon: ${cinema.phone}</p>
+    </div>
+  `;
 }

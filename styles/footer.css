@@ -14,4 +14,11 @@
   .footer-links a:hover {
     color: var(--success-color);
   }
+
+  .footer .footer-logo {
+    height: 50px;
+    display: block;
+    margin: 0 auto 10px;
+  }
+  
   

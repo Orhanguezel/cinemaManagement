@@ -1,16 +1,18 @@
-import { getCinemaSalons } from "../data/filmsData.js";
-import { cinemas } from "../data/cinemas.js";
+import { getCinemaSalons } from "../data/data.js";
+import { cinemas } from "../data/Cinema.js";
 import { showSeatSelection } from "./seatSelection.js";
 
 /**
  * Tarih ve Saat Seçimi Ekranını Gösterir
- * @param {number} cinemaId - Seçilen sinema ID'si
- * @param {number} salonId - Seçilen salon ID'si
  */
-export function showDateSelection(cinemaId, salonId) {
+export function showDateSelection() {
+  const cinemaId = localStorage.getItem("selectedCinemaId");
+  const salonId = localStorage.getItem("selectedSalonId");
+
+  // Sinema ve salon bilgilerini kontrol et
   const mainContent = document.getElementById("main-content");
-  const selectedCinema = cinemas.find((c) => c.id === cinemaId);
-  const selectedSalon = getCinemaSalons(cinemaId)?.find((s) => s.id === parseInt(salonId));
+  const selectedCinema = cinemas.find((c) => c.id === Number(cinemaId));
+  const selectedSalon = getCinemaSalons(Number(cinemaId))?.find((s) => s.id === Number(salonId));
 
   if (!selectedCinema) {
     alert("Sinema bilgisi bulunamadı.");
@@ -22,7 +24,7 @@ export function showDateSelection(cinemaId, salonId) {
     return;
   }
 
-  // Tarih ve saat seçim formunu oluştur
+  // Tarih ve saat seçim ekranı oluştur
   mainContent.innerHTML = `
     <h2>${selectedCinema.name} - ${selectedSalon.name}</h2>
     <form id="dateForm" class="date-form">
@@ -49,7 +51,7 @@ export function showDateSelection(cinemaId, salonId) {
   dateSelect.min = today;
 
   // Koltuk seçimine yönlendirme
-  document.getElementById("proceedToSeats")?.addEventListener("click", () => {
+  document.getElementById("proceedToSeats").addEventListener("click", () => {
     const selectedDate = dateSelect.value;
     const selectedTime = document.getElementById("timeSelect")?.value;
 
@@ -58,21 +60,11 @@ export function showDateSelection(cinemaId, salonId) {
       return;
     }
 
-    showSeatSelection(cinemaId, salonId, selectedDate, selectedTime);
-  });
-}
+    // Seçilen tarih ve saati sakla
+    localStorage.setItem("selectedDate", selectedDate);
+    localStorage.setItem("selectedTime", selectedTime);
 
-/**
- * Salon Seçimi Onay Düğmesini Bağlar
- * @param {number} cinemaId - Seçilen sinema ID'si
- */
-export function attachConfirmSalonListener(cinemaId) {
-  document.getElementById("confirmSalon")?.addEventListener("click", () => {
-    const selectedSalon = document.querySelector("input[name='salon']:checked");
-    if (selectedSalon) {
-      showDateSelection(cinemaId, selectedSalon.value);
-    } else {
-      alert("Lütfen bir salon seçin.");
-    }
+    console.log(`Seçilen Tarih: ${selectedDate}, Seçilen Saat: ${selectedTime}`);
+    showSeatSelection(cinemaId, salonId, selectedDate, selectedTime);
   });
 }
