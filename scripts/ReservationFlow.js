@@ -1,4 +1,4 @@
-import { startReservation } from "./data/Reservation.js";
+import { startReservation } from "./scripts/data/Reservation.js";
 
 export function setupCinemaSelection() {
   document.querySelectorAll(".select-cinema").forEach((button) => {

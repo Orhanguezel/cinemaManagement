@@ -9,20 +9,22 @@ export function startReservation(cinemaId) {
         return;
     }
 
-    const cinemaShows = getCinemaShows(cinemaId);
-    if (!cinemaShows || cinemaShows.length === 0) {
-        alert("Für dieses Kino sind keine Vorführungen verfügbar!");
-        return;
-    }
+    // Main content alanının arka planını değiştirme
+    const mainContent = document.getElementById("main-content");
+    mainContent.style.backgroundImage = `url(${selectedCinema.logo})`;
+    mainContent.style.backgroundSize = "cover";
+    mainContent.style.backgroundPosition = "center";
+    mainContent.style.color = "#ffffff";
 
-    // Film Seçimi Ekranı
-    renderFilmSelection(selectedCinema, cinemaShows);
+    // Film seçim ekranını gösterme
+    renderFilmSelectionWithShows(selectedCinema);
 }
 
-// Film Seçimi Ekranı
-function renderFilmSelection(selectedCinema, cinemaShows) {
+// Film Seçimi Ekranı (Sadece Sinema Seçiminden Gelen)
+function renderFilmSelectionWithShows(selectedCinema) {
+    const cinemaShows = getCinemaShows(selectedCinema.id);
     const uniqueFilms = new Set();
-    const mainContent = document.getElementById("mainContent");
+    const mainContent = document.getElementById("main-content");
 
     mainContent.innerHTML = `
         <h2>Film Seçimi - ${selectedCinema.name}</h2>
@@ -44,8 +46,15 @@ function renderFilmSelection(selectedCinema, cinemaShows) {
             )
             .join("")}
         </div>
+        <button class="btn-secondary go-back">Geri Dön</button>
     `;
 
+    // Geri dönüş butonu
+    document.querySelector(".go-back").addEventListener("click", () => {
+        location.reload(); // Sayfayı yenileyerek başlangıç ekranına döner
+    });
+
+    // Film seçimi butonlarına olay dinleyicisi ekle
     document.querySelectorAll(".select-film").forEach((button) => {
         button.addEventListener("click", () => {
             const filmId = parseInt(button.dataset.filmId, 10);
@@ -58,7 +67,7 @@ function renderFilmSelection(selectedCinema, cinemaShows) {
 
 // Gösterim Saatleri Ekranı
 function renderShowTimeSelection(selectedFilmShows) {
-    const mainContent = document.getElementById("mainContent");
+    const mainContent = document.getElementById("main-content");
 
     mainContent.innerHTML = `
         <h2>Gösterim Saatleri</h2>
@@ -88,7 +97,7 @@ function renderShowTimeSelection(selectedFilmShows) {
 
 // Menü Seçim Ekranı
 function showMenuSelection(time, salonId) {
-    const mainContent = document.getElementById("mainContent");
+    const mainContent = document.getElementById("main-content");
     const selectedCinema = cinemas.find((c) => c.salons.some((s) => s.id === parseInt(salonId)));
 
     if (!selectedCinema) return;
