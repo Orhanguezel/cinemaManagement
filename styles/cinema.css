@@ -1,0 +1,37 @@
+.cinema-container {
+    margin-top: 20px;
+    padding: var(--container-padding);
+}
+
+.cinema-title {
+    text-align: center;
+    font-size: var(--font-size-h2);
+    color: var(--primary-color);
+}
+
+.cinema-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--grid-gap);
+    padding: 20px;
+}
+
+.cinema-item {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cinema-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cinema-item img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}

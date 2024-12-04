@@ -1,0 +1,28 @@
+{
+    "cinemas": [
+        {
+            "id": "cineplex-koeln",
+            "name": "Cineplex Köln",
+            "movies": ["movie1", "movie2"]
+        },
+        {
+            "id": "cineplex-berlin",
+            "name": "Cineplex Berlin",
+            "movies": ["movie3", "movie4"]
+        }
+    ],
+    "movies": [
+        {
+            "id": "movie1",
+            "title": "Inception",
+            "categories": ["Drama", "Science Fiction"],
+            "price": 10.5
+        },
+        {
+            "id": "movie2",
+            "title": "Interstellar",
+            "categories": ["Drama", "Adventure"],
+            "price": 12
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+.cinema-selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.cinema-card {
+  width: 220px;
+  padding: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  text-align: center;
+  background-color: var(--card-bg-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cinema-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cinema-logo {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}

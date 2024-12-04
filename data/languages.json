@@ -1,0 +1,10 @@
+{
+    "en": {
+        "header": "Welcome to Kino-Ticket",
+        "footer": "All rights reserved."
+    },
+    "de": {
+        "header": "Willkommen bei Kino-Ticket",
+        "footer": "Alle Rechte vorbehalten."
+    }
+}

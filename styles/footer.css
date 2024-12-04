@@ -1,0 +1,17 @@
+.footer {
+    background-color: var(--secondary2-color);
+    color: var(--light-color);
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .footer-links a {
+    color: var(--light-color);
+    margin: 0 10px;
+    text-decoration: none;
+  }
+  
+  .footer-links a:hover {
+    color: var(--success-color);
+  }
+  
