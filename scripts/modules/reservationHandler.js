@@ -17,7 +17,6 @@ export function startReservation(cinemaId) {
     return;
   }
 
-  // Ana içerik güncelleme
   const mainContent = document.getElementById("main-content");
 
   if (mainContent) {
@@ -100,9 +99,17 @@ function loadFilmSelection(cinema) {
       // Seçilen film ve sinema bilgilerini localStorage'a kaydet
       localStorage.setItem("selectedCinemaId", cinema.id);
       localStorage.setItem("selectedFilmId", filmId);
-
-      // Salon seçim ekranına yönlendir
-      showSalonSelection(); 
+      console.log("Seçilen sinema ve film bilgileri kaydedildi.");
+      console.log(`Sinema ID: ${cinema.id}, Film ID: ${filmId}`);
+  
+      try {
+        // Salon seçim ekranına yönlendir
+        showSalonSelection(cinema.id, filmId);
+      } catch (error) {
+        console.error("Salon seçim ekranına yönlendirme başarısız:", error);
+        alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+      }
     });
   });
+  
 }

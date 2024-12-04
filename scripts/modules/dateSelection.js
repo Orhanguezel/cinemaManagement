@@ -1,4 +1,4 @@
-import { getCinemaSalons } from "../data/data.js";
+import { getCinemaSalons } from "../data/seatData.js";
 import { cinemas } from "../data/Cinema.js";
 import { showSeatSelection } from "./seatSelection.js";
 
@@ -13,6 +13,7 @@ export function showDateSelection() {
   const mainContent = document.getElementById("main-content");
   const selectedCinema = cinemas.find((c) => c.id === Number(cinemaId));
   const selectedSalon = getCinemaSalons(Number(cinemaId))?.find((s) => s.id === Number(salonId));
+  console.log("Seçilen sinema ve salon bilgileri:", selectedCinema, selectedSalon);
 
   if (!selectedCinema) {
     alert("Sinema bilgisi bulunamadı.");

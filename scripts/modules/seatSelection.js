@@ -1,5 +1,5 @@
 import { cinemas } from "../data/Cinema.js";
-import { getCinemaSalons } from "../data/data.js";
+import { getCinemaSalons } from "../data/seatData.js";
 import { showModal, closeModal } from "./modalHandler.js";
 import { setCart, getCart } from "./checkoutHandler.js";
 import { showCartModal } from "./paymentProcessing.js";
@@ -11,7 +11,7 @@ const DISCOUNTS = {
 
 const PUBLIC_DAYS = ["Monday", "Wednesday"];
 
-// Seat class
+// **Seat Class**
 class Seat {
   constructor(row, number, occupied = false) {
     this.row = row;
@@ -45,7 +45,7 @@ class Seat {
   }
 }
 
-// Seat Manager
+// **Seat Manager**
 class SeatManager {
   constructor(container) {
     this.container = container;
@@ -87,16 +87,16 @@ class SeatManager {
   }
 }
 
-// Main seat selection function
+// **Main Seat Selection Function**
 export function showSeatSelection(cinemaId, salonId, selectedDate, selectedTime) {
-  const cinema = cinemas.find((c) => c.id === cinemaId);
+  const cinema = cinemas.find((c) => c.id === Number(cinemaId));
   if (!cinema) {
     alert("Sinema bilgisi bulunamadı!");
     return;
   }
 
-  const cinemaSalons = getCinemaSalons(cinemaId);
-  const salon = cinemaSalons.find((s) => s.id === parseInt(salonId));
+  const cinemaSalons = getCinemaSalons(Number(cinemaId));
+  const salon = cinemaSalons.find((s) => s.id === Number(salonId));
   if (!salon) {
     alert("Salon bilgisi bulunamadı!");
     return;
@@ -135,7 +135,7 @@ export function showSeatSelection(cinemaId, salonId, selectedDate, selectedTime)
   });
 }
 
-// Summary of selected seats
+// **Summary of Selected Seats**
 function showSeatSummary(selectedSeats, cinema, salon, selectedDate, selectedTime) {
   const modalContent = `
       <h3>Ausgewählte Plätze:</h3>
@@ -152,7 +152,7 @@ function showSeatSummary(selectedSeats, cinema, salon, selectedDate, selectedTim
   });
 }
 
-// Customer details input
+// **Customer Details Input**
 function enterDetails(selectedSeats, cinema, salon, selectedDate, selectedTime) {
   const modalContent = `
       <h3>Kundendetails</h3>
@@ -219,7 +219,7 @@ function enterDetails(selectedSeats, cinema, salon, selectedDate, selectedTime) 
   });
 }
 
-// Payment modal
+// **Payment Modal**
 function showPaymentModal() {
   const cart = getCart();
   if (cart.length === 0) {
