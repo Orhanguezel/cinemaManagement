@@ -1,15 +1,16 @@
-import { cinemas } from "../data/Cinema.js";
-import { showSalonSelection } from "./salonSelection.js"; // Salon seçim fonksiyonunu içe aktar
+// scripts/management/reservationHandler.js
+import { getCinemaById } from "../management/cinemaManagement.js";
+import { showSalonSelection } from "../modules/salonSelection.js";
 
 // Sinema Rezervasyonunu Başlatır
 export function startReservation(cinemaId) {
   if (typeof cinemaId !== "number") {
-    console.error("Hatalı cinemaId tipi, beklenen: 'number', alınan:", cinemaId);
+    console.error("Hatalı cinemaId tipi. Beklenen: 'number', alınan:", cinemaId);
     alert("Geçersiz sinema seçimi.");
     return;
   }
 
-  const cinema = cinemas.find((c) => c.id === cinemaId);
+  const cinema = getCinemaById(cinemaId);
 
   if (!cinema) {
     console.error(`Sinema bulunamadı! ID: ${cinemaId}`);
@@ -17,34 +18,44 @@ export function startReservation(cinemaId) {
     return;
   }
 
-  const mainContent = document.getElementById("main-content");
+  renderCinemaDetails(cinema);
+}
 
-  if (mainContent) {
-    mainContent.style.backgroundImage = `url('${cinema.backgroundImage}')`;
-    mainContent.style.backgroundSize = "cover";
-    mainContent.style.backgroundPosition = "center";
-    mainContent.innerHTML = `
-      <div class="cinema-details">
-        <h2>${cinema.name}</h2>
-        <p>${cinema.description}</p>
-        <div class="cinema-actions">
-          <button class="btn-primary" id="reservation-button">Film Seçimi</button>
-          <button class="btn-secondary" id="back-button">Geri Dön</button>
-        </div>
-      </div>
-    `;
+// Sinema Detaylarını ve Film Seçimini Gösterir
+function renderCinemaDetails(cinema) {
+  const mainContent = document.getElementById("main-content");
+  if (!mainContent) {
+    console.error("Ana içerik elemanı bulunamadı.");
+    return;
   }
 
-  // Film seçim ekranına yönlendirme
+  mainContent.style.backgroundImage = `url('${cinema.backgroundImage}')`;
+  mainContent.style.backgroundSize = "cover";
+  mainContent.style.backgroundPosition = "center";
+  mainContent.innerHTML = `
+    <div class="cinema-details">
+      <h2>${cinema.name}</h2>
+      <p>${cinema.description}</p>
+      <div class="cinema-actions">
+        <button class="btn-primary" id="reservation-button">Film Seçimi</button>
+        <button class="btn-secondary" id="back-button">Geri Dön</button>
+      </div>
+    </div>
+  `;
+
+  attachCinemaDetailsEvents(cinema);
+}
+
+// Sinema Detay Ekranındaki Olayları Bağlar
+function attachCinemaDetailsEvents(cinema) {
   const reservationButton = document.getElementById("reservation-button");
   if (reservationButton) {
     reservationButton.addEventListener("click", () => {
       console.log(`Film seçim ekranına yönlendiriliyor: ${cinema.name}`);
-      loadFilmSelection(cinema); // Film seçim ekranını yükler
+      renderFilmSelection(cinema);
     });
   }
 
-  // Geri dönüş işlemi
   const backButton = document.getElementById("back-button");
   if (backButton) {
     backButton.addEventListener("click", () => {
@@ -52,64 +63,69 @@ export function startReservation(cinemaId) {
       location.reload(); // Sayfayı yenileyerek başlangıç ekranına dön
     });
   }
-
-  console.log(`Rezervasyon başlatıldı: ${cinema.name}`);
 }
 
-// Film seçim ekranını yükler
-function loadFilmSelection(cinema) {
+// Film Seçim Ekranını Gösterir
+function renderFilmSelection(cinema) {
   const mainContent = document.getElementById("main-content");
-
-  if (mainContent) {
-    mainContent.innerHTML = `
-      <h2>Film Seçimi - ${cinema.name}</h2>
-      <div class="film-selection">
-        ${cinema.shows
-          .map(
-            (show) => `
-            <div class="film-card">
-              <img src="${show.film.image}" alt="${show.film.name}">
-              <h3>${show.film.name}</h3>
-              <button class="btn-primary select-film" data-film-id="${show.film.id}">Seç</button>
-            </div>
-          `
-          )
-          .join("")}
-      </div>
-      <button class="btn-secondary" id="back-to-cinema-details">Geri Dön</button>
-    `;
+  if (!mainContent) {
+    console.error("Ana içerik elemanı bulunamadı.");
+    return;
   }
 
-  // Geri dönüş butonu için olay dinleyici
+  mainContent.innerHTML = `
+    <h2>Film Seçimi - ${cinema.name}</h2>
+    <div class="film-selection">
+      ${cinema.shows
+        .map(
+          (show) => `
+        <div class="film-card">
+          <img src="${show.film.image}" alt="${show.film.name}">
+          <h3>${show.film.name}</h3>
+          <button class="btn-primary select-film" data-film-id="${show.film.id}">Seç</button>
+        </div>
+      `
+        )
+        .join("")}
+    </div>
+    <button class="btn-secondary" id="back-to-cinema-details">Geri Dön</button>
+  `;
+
+  attachFilmSelectionEvents(cinema);
+}
+
+// Film Seçim Ekranındaki Olayları Bağlar
+function attachFilmSelectionEvents(cinema) {
   const backToCinemaDetailsButton = document.getElementById("back-to-cinema-details");
   if (backToCinemaDetailsButton) {
     backToCinemaDetailsButton.addEventListener("click", () => {
       console.log("Sinema detaylarına geri dönülüyor...");
-      startReservation(cinema.id); // Sinema detay ekranını yeniden yükler
+      renderCinemaDetails(cinema);
     });
   }
 
-  // Film seçim butonlarına olay dinleyici ekle
   const filmButtons = document.querySelectorAll(".select-film");
   filmButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const filmId = parseInt(button.dataset.filmId, 10);
       console.log(`Seçilen Film ID: ${filmId}`);
-      
-      // Seçilen film ve sinema bilgilerini localStorage'a kaydet
+
+      // Seçilen film ve sinema bilgilerini kaydet
       localStorage.setItem("selectedCinemaId", cinema.id);
       localStorage.setItem("selectedFilmId", filmId);
-      console.log("Seçilen sinema ve film bilgileri kaydedildi.");
-      console.log(`Sinema ID: ${cinema.id}, Film ID: ${filmId}`);
-  
-      try {
-        // Salon seçim ekranına yönlendir
-        showSalonSelection(cinema.id, filmId);
-      } catch (error) {
-        console.error("Salon seçim ekranına yönlendirme başarısız:", error);
-        alert("Bir hata oluştu. Lütfen tekrar deneyin.");
-      }
+
+      console.log(`Sinema ID: ${cinema.id}, Film ID: ${filmId} kaydedildi.`);
+      navigateToSalonSelection(cinema.id, filmId);
     });
   });
-  
+}
+
+// Salon Seçim Ekranına Yönlendirir
+function navigateToSalonSelection(cinemaId, filmId) {
+  try {
+    showSalonSelection(cinemaId, filmId);
+  } catch (error) {
+    console.error("Salon seçim ekranına yönlendirme başarısız:", error);
+    alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+  }
 }

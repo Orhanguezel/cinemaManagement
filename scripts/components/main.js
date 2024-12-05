@@ -1,5 +1,5 @@
-import { cinemas } from "../data/Cinema.js";
-import { getSelectedCinema, setupMainContent } from "../modules/cinemaSelection.js"; // Güncel import
+import { listAllCinemas, getCinemaById } from "../management/cinemaManagement.js";
+import { getSelectedCinema, setupMainContent } from "../modules/cinemaSelection.js";
 import { loadHeader } from "./header.js";
 
 export function loadMainContent() {
@@ -45,41 +45,19 @@ export function loadMainContent() {
 }
 
 function createCinemaDropdown() {
+  const cinemas = listAllCinemas();
   return `
-    <h2>Wählen Sie ein Kino aus:</h2>
-    <div class="dropdown">
-      <button class="btn-primary dropdown-button" id="cinema-dropdown-button">Kino Liste</button>
-      <ul class="dropdown-menu" id="cinema-dropdown-menu">
-        ${cinemas
-          .map(
-            (cinema) => `
-            <li class="dropdown-item" data-id="${cinema.id}">${cinema.name}</li>
-          `
-          )
-          .join("")}
-      </ul>
-    </div>
+    <select id="cinemaDropdown">
+      ${cinemas.map((cinema) => `<option value="${cinema.id}">${cinema.name}</option>`).join("")}
+    </select>
   `;
 }
 
 export function initializeMainContentEvents() {
-  const dropdownButton = document.getElementById("cinema-dropdown-button");
-  const dropdownMenu = document.getElementById("cinema-dropdown-menu");
-
-  dropdownButton.addEventListener("click", () => {
-    dropdownMenu.classList.toggle("show");
-  });
-
-  dropdownMenu.addEventListener("click", (event) => {
-    if (event.target.classList.contains("dropdown-item")) {
-      const cinemaId = parseInt(event.target.dataset.id, 10);
-      console.log(`Seçilen Sinema ID: ${cinemaId}`);
-      const selectedCinema = cinemas.find((c) => c.id === cinemaId); // Seçilen sinema
-      if (selectedCinema) {
-        setupMainContent(selectedCinema);
-        loadHeader(selectedCinema); // Header'ı güncelle
-      }
-    }
+  document.getElementById("cinemaDropdown").addEventListener("change", (e) => {
+    const cinemaId = Number(e.target.value);
+    const cinema = getCinemaById(cinemaId);
+    setupMainContent(cinema);
   });
 }
 

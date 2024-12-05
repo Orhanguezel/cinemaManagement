@@ -1,15 +1,18 @@
-import { cinemas } from "../data/Cinema.js";
+// scripts/management/cinemaManagement.js
+import { getCinemaById } from "../management/cinemaManagement.js";
 import { loadHeader } from "../components/header.js";
 import { loadMainContent } from "../components/main.js";
 import { setupContactHamburgerMenu } from "../components/contactHamburger.js";
 import { cineGroupInfo } from "../data/cineGroupInfo.js";
 import { startReservation } from "../modules/reservationHandler.js";
 
+// **Seçili Sinemayı Getir**
 export function getSelectedCinema() {
   const storedCinema = localStorage.getItem("selectedCinema");
   return storedCinema ? JSON.parse(storedCinema) : cineGroupInfo; // Varsayılan bilgiyi döndür
 }
 
+// **Ana İçeriği Ayarla**
 export function setupMainContent(cinema = null) {
   const mainContent = document.getElementById("main-content");
   if (!mainContent) return;
@@ -40,6 +43,7 @@ export function setupMainContent(cinema = null) {
   mainContent.style.backgroundPosition = "center";
   mainContent.style.minHeight = "500px";
 
+  // Film Seçimi Buton Olayı
   const startFilmSelectionButton = document.getElementById("startFilmSelection");
   if (startFilmSelectionButton) {
     startFilmSelectionButton.addEventListener("click", () => {
@@ -48,6 +52,7 @@ export function setupMainContent(cinema = null) {
     });
   }
 
+  // Ana Sayfaya Dönüş Buton Olayı
   const toMainPageButton = document.getElementById("toMainPageButton");
   if (toMainPageButton) {
     toMainPageButton.addEventListener("click", () => {
@@ -60,6 +65,7 @@ export function setupMainContent(cinema = null) {
   }
 }
 
+// **Film Seçim Ekranı Yükle**
 function loadFilmSelection(cinema) {
   const mainContent = document.getElementById("main-content");
   if (!mainContent) return;
@@ -72,6 +78,7 @@ function loadFilmSelection(cinema) {
     <button id="backToCinemaDetails" class="btn-secondary">Geri Dön</button>
   `;
 
+  // Geri Dön Buton Olayı
   const backToCinemaDetailsButton = document.getElementById("backToCinemaDetails");
   if (backToCinemaDetailsButton) {
     backToCinemaDetailsButton.addEventListener("click", () => {

@@ -1,32 +1,26 @@
-import { salons } from "./Salon.js";
-import { films } from "./Film.js";
+import { salons } from "./Salons.js";
 
 export class Cinema {
-  constructor(id, name, address, logo, description, backgroundImage, phone, email, map) {
+  constructor(
+    id,
+    name,
+    address,
+    logo,
+    description,
+    background,
+    phone,
+    email,
+    mapEmbed
+  ) {
     this.id = id;
     this.name = name;
     this.address = address;
     this.logo = logo;
     this.description = description;
-    this.backgroundImage = backgroundImage;
+    this.background = background;
     this.phone = phone;
     this.email = email;
-    this.map = map;
-    this.salons = [];
-    this.shows = [];
-    this.menu = [];
-  }
-
-  addSalon(salon) {
-    this.salons.push(salon);
-  }
-
-  addShow(show) {
-    this.shows.push(show);
-  }
-
-  addMenuItem(item) {
-    this.menu.push(item);
+    this.mapEmbed = mapEmbed;
   }
 }
 
@@ -142,72 +136,3 @@ export const cinemas = [
     "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_HANNOVER"
   ),
 ];
-
-
-// Her sinemaya salon ekle
-cinemas.forEach((cinema) => {
-  salons.forEach((salon) => {
-    cinema.addSalon({ ...salon, id: `${cinema.id}-${salon.id}` });
-  });
-});
-
-// Gösterimleri ekle
-cinemas.forEach((cinema) => {
-  if (cinema.salons.length > 0) {
-    films.slice(0, 3).forEach((film, idx) => {
-      cinema.addShow({
-        film,
-        salon: cinema.salons[idx % cinema.salons.length],
-        time: `${10 + idx}:00`,
-      });
-    });
-  } else {
-    console.warn(`Cinema with ID ${cinema.id} does not have any salons to add shows.`);
-  }
-});
-
-// Salon ve film uyuşmasını kontrol et
-cinemas.forEach((cinema) => {
-  console.log(`Sinema: ${cinema.name}`);
-  if (!cinema.shows || cinema.shows.length === 0) {
-    console.warn(`  Bu sinema için gösterim bulunamadı.`);
-  } else {
-    cinema.shows.forEach((show, idx) => {
-      if (!show.film || !show.salon) {
-        console.error(`  Gösterim ${idx + 1} için film veya salon bilgisi eksik.`);
-      } else {
-        console.log(`  Gösterim ${idx + 1}: Film: ${show.film.name}, Salon: ${show.salon.name}, Saat: ${show.time}`);
-      }
-    });
-  }
-});
-
-
-
-// Menü ekle
-cinemas[0].addMenuItem({ name: "Popcorn", price: 5 });
-cinemas[0].addMenuItem({ name: "Coca Cola", price: 3 });
-cinemas[1].addMenuItem({ name: "Nachos", price: 6 });
-cinemas[1].addMenuItem({ name: "Fanta", price: 3 });
-
-export const cineGroupInfo = {
-  title: "CineGrup Kinos",
-  description: "Ihr vertrauenswürdiger Begleiter für die besten Kinoerlebnisse.",
-  logo: "./assets/logo/cinegrup.png",
-  footerLogo: "./assets/logo/footer/cinegrup2.png",
-  footer: "© 2024 CineGrup, entwickelt von OG.",
-  address: "Deutschlandweit verfügbar.",
-  phone: "(+888) 123 456 765",
-  email: "cinegrup@cinegrup.com",
-  map: "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_BERLIN",
-  facebook: "#",
-  twitter: "#",
-  youtube: "#",
-  instagram: "#",
-  telegram: "#",
-  whatsup: "#",
-  design: "OG",
-  get footer() {
-    return `© 2024 CineGrup, entwickelt von ${this.design}`;
-  },
-};
