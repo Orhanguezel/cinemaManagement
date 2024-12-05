@@ -1,0 +1,115 @@
+/* Genel Stil */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* Başlık */
+h1 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Yönetim Paneli */
+#cinema-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px auto;
+  max-width: 80%;
+}
+
+#cinema-buttons button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+#cinema-buttons button:hover {
+  background-color: #0056b3;
+}
+
+/* Çıktı Alanı */
+#output {
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 80%;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Sinema Salonu */
+.hall {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  padding: 15px;
+  background: #121212;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.hall__screen {
+  background: linear-gradient(to bottom, #ff7f50, #e25822);
+  width: 80%;
+  height: 30px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 30px;
+}
+
+.seats {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.seat-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+.seat.available {
+  background: #1e90ff;
+  color: white;
+}
+
+.seat.occupied {
+  background: #d9534f;
+  color: white;
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  background: #5cb85c;
+  color: white;
+}
