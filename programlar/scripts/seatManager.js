@@ -178,6 +178,60 @@ export function calculateSalonCapacity(salon) {
       }
     }
   }
+
+// Alfabetik sıra ve koltuk yerleşimi oluşturma
+export function generateSeatsLayout(salon) {
+  const seatsContainer = document.createElement("div");
+  seatsContainer.className = "seats";
+
+  // Satırları gruplandır
+  const rows = salon.seatsList.reduce((acc, seat) => {
+    if (!acc[seat.row]) acc[seat.row] = [];
+    acc[seat.row].push(seat);
+    return acc;
+  }, {});
+
+  // Satırları sırayla işleyin
+  Object.keys(rows)
+    .sort((a, b) => a.localeCompare(b)) // Alfabetik sıralama
+    .forEach((rowKey) => {
+      const rowDiv = document.createElement("div");
+      rowDiv.className = "seat-row";
+
+      // Satır başlığı ekle (örneğin "A", "B", "C")
+      const rowLabel = document.createElement("div");
+      rowLabel.className = "row-label";
+      rowLabel.innerText = rowKey; // Satır harfi
+      rowDiv.appendChild(rowLabel);
+
+      rows[rowKey]
+        .sort((a, b) => a.number - b.number) // Koltukları sırayla yerleştir
+        .forEach((seat) => {
+          const seatElement = document.createElement("div");
+          seatElement.className = `seat ${
+            seat.status === "boş"
+              ? "available"
+              : seat.status === "seçili"
+              ? "selected"
+              : "occupied"
+          }`;
+          seatElement.dataset.seatId = seat.id;
+          seatElement.dataset.salonId = salon.id;
+          seatElement.innerText = `${rowKey}${seat.number}`; // Örneğin: A1, B5
+          rowDiv.appendChild(seatElement);
+        });
+
+      seatsContainer.appendChild(rowDiv);
+    });
+
+  return seatsContainer;
+}
+
+
+
+
+
+
 // 1. Koltuk Seçimi
 // handleSeatSelection("1-1", "1-1-A1"); // A1 koltuğunu seç
 // handleSeatSelection("1-1", "1-1-A1"); // A1 koltuğunun seçimini kaldır

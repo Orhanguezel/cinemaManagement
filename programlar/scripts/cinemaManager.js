@@ -1,12 +1,12 @@
+// cinemaManager.js
 import { cinemas } from "./data/Cinemas.js";
 import { salons } from "./data/Salons.js";
 import { assignSalonsToCinemas } from "./salonAssignment.js";
 import { assignSeatsToSalons } from "./seatAssignment.js";
 
-// Sinema verilerini başlatma ve tüm atamaları tamamlama
 export function initializeCinemaData() {
-  assignSalonsToCinemas(cinemas, salons); // Sinemalara salon atama
-  assignSeatsToSalons(cinemas);          // Salonlara koltuk atama
+  assignSalonsToCinemas(cinemas, salons); // Salonları sinemalara ata
+  assignSeatsToSalons(cinemas);          // Salonlara koltuk ata
   console.log("Veriler başarıyla başlatıldı!");
   return cinemas;
 }

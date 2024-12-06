@@ -1,38 +1,41 @@
 import { initializeCinemaData, getCinemaById } from "../programlar/scripts/cinemaManager.js";
-import { handleSeatSelection } from "../programlar/scripts/seatManager.js";
+import {
+  generateSeatsLayout,
+  handleSeatSelection,
+  assignRandomOccupancy,
+} from "../programlar/scripts/seatManager.js";
+import { createSalonInfoPanel } from "../programlar/scripts/salonAssignment.js"; 
 
 // Sinema verilerini başlat
 const cinemas = initializeCinemaData();
+assignRandomOccupancy(cinemas, 30); // %30 doluluk oranı
 
 // Sayfa başlığını ve ana yapıyı dinamik olarak oluştur
 function initializePage() {
-  // Sayfa başlığını ekle
   const title = document.createElement("h1");
   title.innerText = "Sinema Yönetim Paneli";
   document.body.appendChild(title);
 
-  // Düğmelerin bulunacağı alan
   const buttonsContainer = document.createElement("div");
   buttonsContainer.id = "cinema-buttons";
+  buttonsContainer.style.marginBottom = "20px";
   document.body.appendChild(buttonsContainer);
 
-  // Çıktının gösterileceği alan
   const outputContainer = document.createElement("div");
   outputContainer.id = "output";
   document.body.appendChild(outputContainer);
 
-  renderCinemaButtons(); // Sinema düğmelerini oluştur
+  renderCinemaButtons();
 }
 
 // Yönetim paneli düğmelerini oluştur
 function renderCinemaButtons() {
   const buttonsContainer = document.getElementById("cinema-buttons");
-  buttonsContainer.innerHTML = ""; // Daha önceki düğmeleri temizle
+  buttonsContainer.innerHTML = ""; // Eski butonları temizle
 
   cinemas.forEach((cinema) => {
     const button = document.createElement("button");
     button.innerText = cinema.name;
-    button.className = "cinema-button";
     button.onclick = () => renderCinemaDetails(cinema.id);
     buttonsContainer.appendChild(button);
   });
@@ -51,6 +54,7 @@ function renderCinemaDetails(cinemaId) {
 
   const title = document.createElement("h2");
   title.innerText = `Sinema: ${cinema.name}`;
+  title.style.marginBottom = "20px";
   output.appendChild(title);
 
   cinema.salons.forEach((salon) => {
@@ -60,27 +64,19 @@ function renderCinemaDetails(cinemaId) {
     const screen = document.createElement("div");
     screen.className = "hall__screen";
     screen.innerText = "Leinwand";
-
     hallContainer.appendChild(screen);
 
-    const seatsContainer = document.createElement("div");
-    seatsContainer.className = "seats";
+    // Salon Bilgi Paneli (salonAssignment.js içindeki mevcut fonksiyon kullanılıyor)
+    const infoPanel = createSalonInfoPanel(salon);
+    hallContainer.appendChild(infoPanel);
 
-    salon.seatsList.forEach((seat) => {
-      const seatElement = document.createElement("div");
-      seatElement.className = `seat ${seat.status === "boş" ? "available" : seat.status === "seçili" ? "selected" : "occupied"}`;
-      seatElement.dataset.seatId = seat.id;
-      seatElement.dataset.salonId = salon.id;
-      seatElement.innerText = `${String.fromCharCode(64 + seat.row)}${seat.number}`; // Alfabetik sıra
+    // Koltuk yerleşimi
+    const seatsLayout = generateSeatsLayout(salon);
+    hallContainer.appendChild(seatsLayout);
 
-      seatsContainer.appendChild(seatElement);
-    });
-
-    hallContainer.appendChild(seatsContainer);
     output.appendChild(hallContainer);
   });
 
-  // Koltuğa tıklama olaylarını bağla
   attachSeatClickListener();
 }
 

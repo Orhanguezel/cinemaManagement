@@ -43,8 +43,69 @@ export function findCinemaBySalon(salonId) {
   console.log(`Salon bulunamadı: ID ${salonId}`);
 }
 
+// Her salonun kapasitesini hesaplayan fonksiyon
+export function calculateSalonCapacity(salon) {
+  const totalSeats = salon.seatsList.length;
+  const availableSeats = salon.seatsList.filter((seat) => seat.status === "boş").length;
+  const occupiedSeats = totalSeats - availableSeats;
+
+  return {
+    totalSeats,
+    availableSeats,
+    occupiedSeats,
+  };
+}
+
+
+
+// Salon Bilgi Paneli Oluşturma Fonksiyonu
+export function createSalonInfoPanel(salon) {
+  // Salon kapasitesini hesapla
+  const { totalSeats, availableSeats, occupiedSeats } = calculateSalonCapacity(salon);
+
+  // Bilgi paneli için ana div oluştur
+  const infoPanel = document.createElement("div");
+  infoPanel.className = "info-box";
+  infoPanel.style.padding = "15px";
+  infoPanel.style.marginBottom = "20px";
+  infoPanel.style.backgroundColor = "#black";
+  infoPanel.style.border = "1px solid #ddd";
+  infoPanel.style.borderRadius = "5px";
+  infoPanel.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.1)";
+
+  // Panel içeriğini HTML formatında ekle
+  infoPanel.innerHTML = `
+    <h3 style="margin-bottom: 10px;">${salon.name}</h3>
+    <p><strong>Toplam Koltuk:</strong> ${totalSeats}</p>
+    <p><strong>Boş Koltuk:</strong> ${availableSeats}</p>
+    <p><strong>Dolu Koltuk:</strong> ${occupiedSeats}</p>
+    <p><strong>Özellikler:</strong> ${salon.features.is3D ? "3D" : "2D"}, ${
+    salon.features.isVIP ? "VIP" : "Standart"
+  }, ${salon.features.sound}</p>
+    <p><strong>Ücret Tarifesi:</strong> ${salon.price || "Belirtilmedi"} €</p>
+  `;
+
+  return infoPanel;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 assignSalonsToCinemas(cinemas, salons);
 console.log("Salon atamaları tamamlandı:", cinemas);
+
 
 
 // İş akışını başlat
