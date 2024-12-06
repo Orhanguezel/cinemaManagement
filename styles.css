@@ -150,6 +150,49 @@ p {
   font-size: 0.95rem;
 }
 
+#assign-methods button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+#assign-methods button:hover {
+  background-color: #0056b3;
+}
+
+
+#film-assignment-options {
+  display: flex;
+  gap: 10px;
+  margin: 20px;
+}
+
+#cinema-buttons button,
+#film-assignment-options button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#cinema-buttons button:hover,
+#film-assignment-options button:hover {
+  background-color: #0056b3;
+}
+
+.info-box {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   #cinema-buttons button {

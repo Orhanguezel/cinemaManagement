@@ -1,7 +1,7 @@
-import { cinemas } from "./data/Cinemas.js";
-import { salons } from "./data/Salons.js";
-import { assignSalonsToCinemas } from "./salonAssignment.js";
-import { assignSeatsToSalons } from "./seatAssignment.js";
+import { cinemas } from "../data/Cinemas.js";
+import { salons } from "../data/Salons.js";
+import { assignSalonsToCinemas } from "../logic/salonAssignment.js";
+import { assignSeatsToSalons } from "../logic/seatAssignment.js";
 
 // Ana iş akışı fonksiyonu
 export const state = {

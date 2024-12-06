@@ -1,6 +1,5 @@
-import { initializeCinemaData, getCinemaById } from "./cinemaManager.js";
-import { assignSeatsRandomly } from "./seatManager.js";
-import { calculateCinemaCapacity } from "./seatManager.js";
+import { initializeCinemaData, getCinemaById } from "../manager/cinemaManager.js";
+import { assignSeatsRandomly, calculateCinemaCapacity } from "../manager/seatManager.js";
 
 // Kullanıcı için sinema ve salon kapasitesini göster
 export function showCinemaCapacity(cinemaId) {

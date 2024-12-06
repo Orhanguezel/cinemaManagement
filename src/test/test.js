@@ -1,5 +1,5 @@
-import { cinemas } from "./data/Cinemas.js";
-import { salons } from "./data/Salons.js";
+import { cinemas } from "../scripts/2.iliskilerveAtamalar/data/Cinemas.js";
+import { salons } from "../scripts/2.iliskilerveAtamalar/data/Salons.js";
 import { assignSalonsToCinemas } from "./salonAssignment.js";
 import { assignSeatsToSalons } from "./seatAssignment.js";
 import { assignFilmsToSalons } from "./filmAssignment.js";

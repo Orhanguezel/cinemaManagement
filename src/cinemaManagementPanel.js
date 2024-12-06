@@ -1,5 +1,5 @@
-import { initializeCinemaData, getCinemaById } from "../programlar/scripts/cinemaManager.js";
-import { calculateCinemaCapacity, assignRandomOccupancy } from "../programlar/scripts/seatManager.js";
+import { initializeCinemaData, getCinemaById } from "./manager/cinemaManager.js";
+import { calculateCinemaCapacity, assignRandomOccupancy } from "./manager/seatManager.js";
 
 const cinemas = initializeCinemaData();
 let selectedCinemaId = null;

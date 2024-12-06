@@ -1,5 +1,5 @@
-import { cinemas } from './data/Cinemas.js';
-import { salons } from './data/Salons.js';
+import { cinemas } from '../data/Cinemas.js';
+import { salons } from '../data/Salons.js';
 
 // Sinemalara salon atama
 export function assignSalonsToCinemas() {
