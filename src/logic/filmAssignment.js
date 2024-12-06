@@ -147,3 +147,162 @@ export function renderFilmDetails(salon) {
 }
 
 
+//Sinemaların ve Filmlerin Başlangıçta Gösterimi
+
+export function renderCinemasWithFilms() {
+  const output = document.getElementById("output");
+  output.innerHTML = ""; // Önceki içeriği temizle
+
+  cinemas.forEach((cinema) => {
+    const cinemaContainer = document.createElement("div");
+    cinemaContainer.className = "cinema-container";
+
+    const cinemaTitle = document.createElement("h3");
+    cinemaTitle.innerText = cinema.name;
+    cinemaContainer.appendChild(cinemaTitle);
+
+    cinema.salons.forEach((salon) => {
+      const film = salon.assignedFilm;
+      if (film) {
+        const filmButton = document.createElement("button");
+        filmButton.innerText = `${salon.name} - ${film.name}`;
+        filmButton.onclick = () => renderFilmDetailsWithSeats(film, salon);
+        cinemaContainer.appendChild(filmButton);
+      }
+    });
+
+    output.appendChild(cinemaContainer);
+  });
+}
+
+// Film Detaylarının Gösterimi ve Salon Bilgisi
+export function renderFilmDetailsWithSeats(film, salon) {
+  const output = document.getElementById("output");
+  output.innerHTML = ""; // Önceki içeriği temizle
+
+  const filmDetails = document.createElement("div");
+  filmDetails.className = "film-details";
+
+  filmDetails.innerHTML = `
+    <h4>${film.name}</h4>
+    <p><strong>Süre:</strong> ${film.duration} dakika</p>
+    <p><strong>Kategoriler:</strong> ${film.categories
+      .map((id) => categories.find((cat) => cat.id === id)?.name || "Bilinmeyen")
+      .join(", ")}</p>
+    <p><strong>Salon:</strong> ${salon.name}</p>
+  `;
+
+  const selectButton = document.createElement("button");
+  selectButton.innerText = "Koltukları Gör";
+  selectButton.onclick = () => renderSeatSelection(salon);
+
+  filmDetails.appendChild(selectButton);
+  output.appendChild(filmDetails);
+}
+
+// Filmleri Kart Şeklinde Göster
+export function renderFilmCards(cinemas) {
+  const filmContainer = document.createElement("div");
+  filmContainer.id = "film-container";
+  filmContainer.style.display = "flex";
+  filmContainer.style.flexWrap = "wrap";
+  filmContainer.style.justifyContent = "center";
+  filmContainer.style.gap = "20px";
+
+  films.forEach((film) => {
+    const filmCard = document.createElement("div");
+    filmCard.className = "film-card";
+    filmCard.style.border = "1px solid #ddd";
+    filmCard.style.borderRadius = "10px";
+    filmCard.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+    filmCard.style.padding = "15px";
+    filmCard.style.width = "300px";
+    filmCard.style.backgroundColor = "#fff";
+
+    const filmImage = document.createElement("img");
+    filmImage.src = film.image;
+    filmImage.alt = film.name;
+    filmImage.style.width = "100%";
+    filmImage.style.borderRadius = "10px 10px 0 0";
+
+    const filmTitle = document.createElement("h3");
+    filmTitle.innerText = film.name;
+
+    const filmDuration = document.createElement("p");
+    filmDuration.innerHTML = `<strong>Süre:</strong> ${film.duration} dakika`;
+
+    const relatedSalons = cinemas
+      .flatMap((cinema) => cinema.salons)
+      .filter((salon) => salon.assignedFilm?.id === film.id);
+
+    const salonInfo = document.createElement("p");
+    salonInfo.innerHTML = `<strong>Salonlar:</strong> ${
+      relatedSalons.length > 0
+        ? relatedSalons.map((salon) => `${salon.name} (${salon.price} €)`).join(", ")
+        : "Henüz atanmadı"
+    }`;
+
+    const selectButton = document.createElement("button");
+    selectButton.innerText = "Koltuk Seç";
+    selectButton.style.marginTop = "10px";
+    selectButton.style.padding = "10px 15px";
+    selectButton.style.backgroundColor = "#007bff";
+    selectButton.style.color = "#fff";
+    selectButton.style.border = "none";
+    selectButton.style.borderRadius = "5px";
+    selectButton.style.cursor = "pointer";
+    selectButton.onclick = () => renderSeatSelection(film, relatedSalons);
+
+    filmCard.appendChild(filmImage);
+    filmCard.appendChild(filmTitle);
+    filmCard.appendChild(filmDuration);
+    filmCard.appendChild(salonInfo);
+    filmCard.appendChild(selectButton);
+
+    filmContainer.appendChild(filmCard);
+  });
+
+  document.body.appendChild(filmContainer);
+}
+
+// Koltuk Seçim Ekranını Göster  bu gidecek
+function renderSeatSelection(film, salons) {
+  const output = document.getElementById("output") || document.createElement("div");
+  output.id = "output";
+  output.innerHTML = ""; // Önceki içeriği temizle
+
+  const filmTitle = document.createElement("h2");
+  filmTitle.innerText = `Film: ${film.name}`;
+  output.appendChild(filmTitle);
+
+  salons.forEach((salon) => {
+    const salonDetails = document.createElement("div");
+    salonDetails.className = "salon-details";
+    salonDetails.innerHTML = `
+      <h3>${salon.name}</h3>
+      <p><strong>Doluluk:</strong> ${salon.seatsList.filter((seat) => seat.status === "dolu").length} / ${
+      salon.seatsList.length
+    }</p>
+    `;
+
+    const seatsContainer = generateSeatsLayout(salon);
+    salonDetails.appendChild(seatsContainer);
+
+    const confirmButton = document.createElement("button");
+    confirmButton.innerText = "Seçimi Onayla";
+    confirmButton.style.marginTop = "10px";
+    confirmButton.style.padding = "10px 15px";
+    confirmButton.style.backgroundColor = "#28a745";
+    confirmButton.style.color = "#fff";
+    confirmButton.style.border = "none";
+    confirmButton.style.borderRadius = "5px";
+    confirmButton.style.cursor = "pointer";
+    salonDetails.appendChild(confirmButton);
+
+    output.appendChild(salonDetails);
+  });
+
+  document.body.appendChild(output);
+}
+
+

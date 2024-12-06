@@ -1,89 +1,72 @@
 import { initializeCinemaData } from "./manager/cinemaManager.js";
-import {
-  manuallyAssignFilmToSalon,
-  assignFilmsByCategory,
-  assignRandomFilmsToSalons,
-  assignOptimalFilmsToSalons,
-  renderFilmSelectionButtons
-} from "./logic/filmAssignment.js";
-import { createSalonInfoPanel } from "./logic/salonAssignment.js";
+import { renderUserPanel, renderAdminPanel } from "./view/cinemaView.js";
 
-// Sinema verilerini başlat
+// Sinema verilerini başlat (verileri bir kez oluştur)
 const cinemas = initializeCinemaData();
 
-// Sayfa başlığı ve yönetim paneli oluştur
-function initializePage() {
+// Header'ı render eden fonksiyon
+function renderHeader() {
+  const header = document.createElement("header");
+  header.style.textAlign = "center";
+  header.style.padding = "10px";
+  header.style.backgroundColor = "#007bff";
+  header.style.color = "white";
+
+  const adminButton = document.createElement("button");
+  adminButton.innerText = "Yönetici Görünümü";
+  adminButton.style.margin = "5px";
+  adminButton.style.padding = "5px 10px";
+  adminButton.style.color = "white";
+  adminButton.style.backgroundColor = "#007bff";
+  adminButton.style.border = "none";
+  adminButton.style.borderRadius = "5px";
+  adminButton.onclick = () => {
+    document.body.innerHTML = ""; // Sayfanın içeriğini temizle
+    renderHeader(); // Header'ı tekrar ekle
+    renderAdminPanel(cinemas); // Yönetici panelini göster
+  };
+
+  const userButton = document.createElement("button");
+  userButton.innerText = "Kullanıcı Görünümü";
+  userButton.style.margin = "5px";
+  userButton.style.padding = "5px 10px";
+  userButton.style.color = "white";
+  userButton.style.backgroundColor = "#28a745";
+  userButton.style.border = "none";
+  userButton.style.borderRadius = "5px";
+  userButton.onclick = () => {
+    document.body.innerHTML = ""; // Sayfanın içeriğini temizle
+    renderHeader(); // Header'ı tekrar ekle
+    renderUserPanel(cinemas); // Kullanıcı panelini göster
+  };
+
+  header.appendChild(adminButton);
+  header.appendChild(userButton);
+  document.body.appendChild(header);
+}
+
+// Başlangıç sayfasını oluştur
+function initializeStartPage() {
+  document.body.innerHTML = ""; // Tüm içerikleri temizle
+  renderHeader(); // Header'ı render et
+
+  const container = document.createElement("div");
+  container.id = "start-panel";
+  container.style.textAlign = "center";
+  container.style.marginTop = "50px";
+
   const title = document.createElement("h1");
-  title.innerText = "Sinema Yönetim Paneli";
-  document.body.appendChild(title);
+  title.innerText = "Sinema Yönetim Sistemi";
+  title.style.marginBottom = "20px";
+  container.appendChild(title);
 
-  const assignOptions = createFilmAssignmentOptions();
-  document.body.appendChild(assignOptions);
+  const description = document.createElement("p");
+  description.innerText = "Lütfen bir işlem seçiniz.";
+  description.style.marginBottom = "20px";
+  container.appendChild(description);
 
-  const cinemaButtons = createCinemaButtons();
-  document.body.appendChild(cinemaButtons);
-
-  renderFilmSelectionButtons(); // Film seçme ve gösterim paneli eklenir
+  document.body.appendChild(container);
 }
 
-// Film atama seçeneklerini oluştur
-function createFilmAssignmentOptions() {
-  const container = document.createElement("div");
-  container.id = "film-assignment-options";
-
-  const manualButton = document.createElement("button");
-  manualButton.innerText = "Manuel Atama";
-  manualButton.onclick = () => manuallyAssignFilmToSalon(1, "1-1");
-
-  const categoryButton = document.createElement("button");
-  categoryButton.innerText = "Kategorilere Göre Atama";
-  categoryButton.onclick = assignFilmsByCategory;
-
-  const randomButton = document.createElement("button");
-  randomButton.innerText = "Rastgele Atama";
-  randomButton.onclick = assignRandomFilmsToSalons;
-
-  const optimalButton = document.createElement("button");
-  optimalButton.innerText = "Optimal Atama";
-  optimalButton.onclick = assignOptimalFilmsToSalons;
-
-  container.appendChild(manualButton);
-  container.appendChild(categoryButton);
-  container.appendChild(randomButton);
-  container.appendChild(optimalButton);
-
-  return container;
-}
-
-// Sinema butonlarını oluştur
-function createCinemaButtons() {
-  const container = document.createElement("div");
-  container.id = "cinema-buttons";
-
-  cinemas.forEach((cinema) => {
-    const button = document.createElement("button");
-    button.innerText = cinema.name;
-    button.onclick = () => renderCinemaDetails(cinema.id);
-    container.appendChild(button);
-  });
-
-  return container;
-}
-
-// Sinema detaylarını göster
-function renderCinemaDetails(cinemaId) {
-  const cinema = cinemas.find((cinema) => cinema.id === cinemaId);
-
-  const output = document.getElementById("output") || document.createElement("div");
-  output.id = "output";
-  output.innerHTML = "";
-
-  cinema.salons.forEach((salon) => {
-    const infoPanel = createSalonInfoPanel(salon);
-    output.appendChild(infoPanel);
-  });
-
-  document.body.appendChild(output);
-}
-
-initializePage();
+// Başlangıç sayfasını başlat
+initializeStartPage();

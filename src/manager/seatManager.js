@@ -26,88 +26,60 @@ export function calculateSalonCapacity(salon) {
   // Koltuklara doluluk oranına göre rastgele müşteri atama
   export function assignSeatsRandomly(salon, occupancyRate) {
     const totalSeats = salon.seatsList.length;
-    const seatsToOccupy = Math.floor((occupancyRate / 100) * totalSeats);
+    const availableSeats = salon.seatsList.filter((seat) => seat.status === "boş");
+    const availableCount = availableSeats.length;
+  
+    // Eğer belirtilen doluluk oranı mevcut koltuklarla uyumlu değilse, maksimum uyumlu doluluk oranı belirlenir
+    const adjustedOccupancyRate = Math.min(occupancyRate, (availableCount / totalSeats) * 100);
+    const seatsToOccupy = Math.floor((adjustedOccupancyRate / 100) * totalSeats);
   
     console.log(`Salon: ${salon.name}`);
     console.log(`Toplam Koltuk: ${totalSeats}`);
-    console.log(`Doluluk Oranı: %${occupancyRate}`);
+    console.log(`Doluluk Oranı: %${adjustedOccupancyRate.toFixed(2)}`);
     console.log(`Dolu Koltuk Sayısı: ${seatsToOccupy}`);
   
     let assignedSeats = 0;
   
     while (assignedSeats < seatsToOccupy) {
-      const randomIndex = Math.floor(Math.random() * totalSeats);
-      const randomSeat = salon.seatsList[randomIndex];
+      const randomIndex = Math.floor(Math.random() * availableSeats.length);
+      const randomSeat = availableSeats[randomIndex];
   
       if (randomSeat.status === "boş") {
         randomSeat.status = "dolu";
         randomSeat.customer = `Müşteri-${assignedSeats + 1}`;
         assignedSeats++;
+  
+        // Koltuğu listeden çıkararak tekrar seçilmesini engelliyoruz
+        availableSeats.splice(randomIndex, 1);
       }
     }
   
-    console.log("Atama tamamlandı!");
-    salon.seatsList.forEach((seat) => {
-      console.log(`Koltuk ID: ${seat.id}, Durum: ${seat.status}, Müşteri: ${seat.customer || "Yok"}`);
-    });
+    console.log(`Atama tamamlandı: ${assignedSeats} koltuk dolu olarak işaretlendi.`);
   }
   
-  export function assignRandomOccupancy(cinemas, occupancyRate = 30) {
-    cinemas.forEach((cinema) => {
-      cinema.salons.forEach((salon) => {
-        assignSeatsRandomly(salon, occupancyRate);
-      });
-    });
-  }
 
-  export function renderSeatsHTML(salon) {
-    const seatsContainer = document.createElement("div");
-    seatsContainer.className = "seats";
+
   
-    const rows = {}; // Satırları gruplamak için obje
-    salon.seatsList.forEach((seat) => {
-      if (!rows[seat.row]) {
-        rows[seat.row] = document.createElement("div");
-        rows[seat.row].className = "seat-row";
+ // Tüm sinemalar için rastgele doluluk oranı atama
+export function assignRandomOccupancy(cinemas) {
+  cinemas.forEach((cinema) => {
+    cinema.salons.forEach((salon) => {
+      const randomPercentage = Math.floor(Math.random() * 101); // 0-100 arasında rastgele bir oran belirle
+      assignSeatsRandomly(salon, randomPercentage);
+
+      // Input alanını güncelle
+      const inputField = document.querySelector(`#salon-${salon.id}-occupancy`);
+      if (inputField) {
+        inputField.value = randomPercentage; // Rastgele oranı input alanına yaz
       }
-  
-      const seatElement = document.createElement("div");
-      seatElement.className = `seat ${seat.status}`;
-      seatElement.innerText = `${String.fromCharCode(64 + seat.row)}${seat.number}`;
-      seatElement.dataset.seatId = seat.id;
-      seatElement.dataset.salonId = salon.id;
-  
-      seatElement.addEventListener("click", () => {
-        handleSeatSelection(salon.id, seat.id);
-      });
-  
-      rows[seat.row].appendChild(seatElement);
     });
-  
-    Object.values(rows).forEach((rowElement) => {
-      seatsContainer.appendChild(rowElement);
-    });
-  
-    return seatsContainer;
-  }
-  
-  export function renderSalonDetails(salon) {
-    const container = document.createElement("div");
-    container.className = "hall";
-  
-    // Ekranda sinema perdesi
-    const screen = document.createElement("div");
-    screen.className = "hall__screen";
-    screen.innerText = "Leinwand";
-    container.appendChild(screen);
-  
-    // Koltuk düzeni
-    const seatsHTML = renderSeatsHTML(salon);
-    container.appendChild(seatsHTML);
-  
-    return container;
-  }
-  
+  });
+
+  alert("Tüm salonlar için rastgele doluluk oranları atandı!");
+}
+
+
+ 
 
 
 
@@ -153,31 +125,7 @@ export function calculateSalonCapacity(salon) {
   
   
   // Salon verilerini localStorage'a kaydeden fonksiyon
-  function saveSalonDataToLocalStorage(salon) {
-    const salonData = {
-      id: salon.id,
-      seatsList: salon.seatsList,
-    };
-    localStorage.setItem(`salon-${salon.id}`, JSON.stringify(salonData));
-    console.log(`Salon verileri kaydedildi: ${salon.id}`);
-  }
-  
-  // LocalStorage'dan salon verilerini yükleyen fonksiyon
-  export function loadSalonDataFromLocalStorage(salonId) {
-    const savedData = localStorage.getItem(`salon-${salonId}`);
-    if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      const cinema = cinemas.find((cinema) =>
-        cinema.salons.some((salon) => salon.id === salonId)
-      );
-  
-      if (cinema) {
-        const salon = cinema.salons.find((salon) => salon.id === salonId);
-        salon.seatsList = parsedData.seatsList;
-        console.log(`Salon verileri yüklendi: ${salon.id}`);
-      }
-    }
-  }
+
 
 // Alfabetik sıra ve koltuk yerleşimi oluşturma
 export function generateSeatsLayout(salon) {
@@ -227,8 +175,19 @@ export function generateSeatsLayout(salon) {
   return seatsContainer;
 }
 
+export function createCinemaButtons(cinemas) {
+  const container = document.createElement("div");
+  container.id = "cinema-buttons";
 
+  cinemas.forEach((cinema) => {
+    const button = document.createElement("button");
+    button.innerText = cinema.name;
+    button.onclick = () => renderCinemaDetails(cinema);
+    container.appendChild(button);
+  });
 
+  return container;
+}
 
 
 

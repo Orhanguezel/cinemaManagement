@@ -58,22 +58,21 @@ export function calculateSalonCapacity(salon) {
 
 // Salon Bilgi Paneli Oluşturma Fonksiyonu
 export function createSalonInfoPanel(salon) {
-  // Salon kapasitesini hesapla
   const { totalSeats, availableSeats, occupiedSeats } = calculateSalonCapacity(salon);
 
-  // Bilgi paneli için ana div oluştur
   const infoPanel = document.createElement("div");
   infoPanel.className = "info-box";
   infoPanel.style.padding = "15px";
   infoPanel.style.marginBottom = "20px";
-  infoPanel.style.backgroundColor = "#black";
+  infoPanel.style.backgroundColor = "#ffffff";
   infoPanel.style.border = "1px solid #ddd";
   infoPanel.style.borderRadius = "5px";
   infoPanel.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.1)";
 
-  // Panel içeriğini HTML formatında ekle
+  const film = salon.assignedFilm; // Salon'a atanmış film
+
   infoPanel.innerHTML = `
-    <h3 style="margin-bottom: 10px;">${salon.name}</h3>
+    <h3>${salon.name}</h3>
     <p><strong>Toplam Koltuk:</strong> ${totalSeats}</p>
     <p><strong>Boş Koltuk:</strong> ${availableSeats}</p>
     <p><strong>Dolu Koltuk:</strong> ${occupiedSeats}</p>
@@ -81,10 +80,17 @@ export function createSalonInfoPanel(salon) {
     salon.features.isVIP ? "VIP" : "Standart"
   }, ${salon.features.sound}</p>
     <p><strong>Ücret Tarifesi:</strong> ${salon.price || "Belirtilmedi"} €</p>
+    ${
+      film
+        ? `<img src="${film.image}" alt="${film.name}" style="width: 100%; max-height: 200px; object-fit: cover; margin-top: 10px;">
+           <p><strong>Film:</strong> ${film.name}</p>`
+        : "<p>Henüz bir film atanmadı</p>"
+    }
   `;
 
   return infoPanel;
 }
+
 
 
 

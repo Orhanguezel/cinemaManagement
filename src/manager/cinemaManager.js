@@ -1,15 +1,30 @@
-// cinemaManager.js
+
+import { assignSalonsToCinemas } from "../logic/salonAssignment.js";
+import { assignSeatsToSalons} from "../logic/seatAssignment.js";
+import { assignRandomOccupancy } from "./seatManager.js";
+import { assignOptimalFilmsToSalons } from "../logic/filmAssignment.js";
 import { cinemas } from "../data/Cinemas.js";
 import { salons } from "../data/Salons.js";
-import { assignSalonsToCinemas } from "../logic/salonAssignment.js";
-import { assignSeatsToSalons } from "../logic/seatAssignment.js";
 
 export function initializeCinemaData() {
-  assignSalonsToCinemas(cinemas, salons); // Salonları sinemalara ata
-  assignSeatsToSalons(cinemas); // Salonlara koltuk ata
+  // Salonları sinemalara ata
+  assignSalonsToCinemas(cinemas, salons);
+
+  // Salonlara koltuk ata
+  assignSeatsToSalons(cinemas);
+  
+// Koltukların doluluk oranını ayarla (örnek: %30 doluluk oranı)
+  assignRandomOccupancy(cinemas, 30);
+
+  // Filmleri optimal şekilde salonlara ata
+  assignOptimalFilmsToSalons(cinemas);
+
+  
+
   console.log("Veriler başarıyla başlatıldı!");
   return cinemas;
 }
+
 
 // Belirli bir sinemayı ID'ye göre getir
 export function getCinemaById(cinemaId) {

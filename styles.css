@@ -245,6 +245,63 @@ p {
   background-color: #0056b3;
 }
 
+.cinema-container {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.film-details {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f4f4f4;
+}
+
+#output button {
+  margin: 5px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#output button:hover {
+  background-color: #0056b3;
+}
+
+
+#film-container {
+  margin-top: 20px;
+}
+
+.film-card img {
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+}
+
+.film-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  width: 300px;
+}
+
+.salon-details {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -263,3 +320,160 @@ p {
     font-size: 0.9rem;
   }
 }
+
+#start-panel {
+  margin: 50px auto;
+  text-align: center;
+}
+
+#start-panel button {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#start-panel button:first-child {
+  background-color: #007bff;
+  color: white;
+}
+
+#start-panel button:last-child {
+  background-color: #28a745;
+  color: white;
+}
+
+#settings-container {
+  margin: 20px auto;
+  max-width: 800px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Başlık ve Alt Başlıklar */
+h2, h3 {
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+h4 {
+  color: #2980b9;
+}
+
+/* Salon Konteyner */
+.salon-container {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #ecf0f1;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Düğmeler */
+button {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+/* Input Alanı */
+input[type="number"] {
+  width: 60px;
+  padding: 5px;
+  border: 1px solid #bdc3c7;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+/* Düğme Grupları */
+button.apply-button {
+  background-color: #27ae60;
+  margin-top: 5px;
+}
+
+button.apply-button:hover {
+  background-color: #2ecc71;
+}
+
+/* Rastgele Uygula Düğmesi */
+button#random-button {
+  background-color: #e74c3c;
+}
+
+button#random-button:hover {
+  background-color: #c0392b;
+}
+
+header {
+  background-color: #007bff;
+  padding: 10px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+header nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+header button {
+  color: white;
+  background-color: #007bff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+header button:hover {
+  background-color: #0056b3;
+}
+
+main {
+  margin-top: 60px;
+  padding: 20px;
+}
+
+.salon-container {
+  background-color: #f8f9fa;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+button {
+  margin-left: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+input {
+  width: 60px;
+  margin-left: 5px;
+}
+
