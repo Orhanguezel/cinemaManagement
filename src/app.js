@@ -4,9 +4,9 @@ import {
   assignFilmsByCategory,
   assignRandomFilmsToSalons,
   assignOptimalFilmsToSalons,
+  renderFilmSelectionButtons
 } from "./logic/filmAssignment.js";
 import { createSalonInfoPanel } from "./logic/salonAssignment.js";
-
 
 // Sinema verilerini başlat
 const cinemas = initializeCinemaData();
@@ -22,6 +22,8 @@ function initializePage() {
 
   const cinemaButtons = createCinemaButtons();
   document.body.appendChild(cinemaButtons);
+
+  renderFilmSelectionButtons(); // Film seçme ve gösterim paneli eklenir
 }
 
 // Film atama seçeneklerini oluştur

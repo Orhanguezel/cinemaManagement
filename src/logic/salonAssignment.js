@@ -56,8 +56,6 @@ export function calculateSalonCapacity(salon) {
   };
 }
 
-
-
 // Salon Bilgi Paneli Oluşturma Fonksiyonu
 export function createSalonInfoPanel(salon) {
   // Salon kapasitesini hesapla
