@@ -1,28 +1,62 @@
 import { renderSeatOccupancySettings } from "./seatsView.js";
-import { state } from "../stateManager.js";
+import { renderSalonAssignmentView } from "./salonView.js";
+import { renderFilmAssignmentView } from "./filmView.js";
+import { renderShowtimeAssignmentView } from "./showtimeView.js"; // Gösteri Atama görünümü eklendi
 
 // Yönetici Panelini Render Etme
-export function renderAdminPanel(cinemas) {
+export function renderAdminPanel(cinemas, salons) {
   const container = document.createElement("div");
   container.id = "admin-panel";
+  container.innerHTML = `<h2>Yönetici Paneli</h2>`;
 
   // "Koltuk Doluluk Ayarları" butonunu oluştur
-  const seatButton = document.createElement("button");
-  seatButton.id = "seat-occupancy-settings";
-  seatButton.innerText = "Koltuk Doluluk Ayarları";
-  container.appendChild(seatButton);
+  createButton(
+    container,
+    "seat-occupancy-settings",
+    "Koltuk Doluluk Ayarları",
+    () => {
+      if (!cinemas || cinemas.length === 0) {
+        console.error("Hata: 'cinemas' verisi geçerli değil!");
+        return;
+      }
+      console.log("Koltuk doluluk ayarlarına tıklandı.");
+      renderSeatOccupancySettings(cinemas); // seatsView.js içindeki fonksiyon
+    }
+  );
+
+  // "Filmleri Salonlara Atama" butonunu oluştur
+  createButton(
+    container,
+    "film-assignment",
+    "Filmleri Salonlara Atama",
+    () => {
+      document.body.innerHTML = ""; // Mevcut içeriği temizle
+      renderFilmAssignmentView(cinemas); // Film atama ekranını render et
+    }
+  );
+
+  // "Salon Atama" Butonu
+  createButton(
+    container,
+    "salon-assignment",
+    "Salon Atama",
+    () => {
+      renderSalonAssignmentView(); // Salon atama ekranını render et
+    }
+  );
+
+  // "Gösteri Atama" Butonu
+  createButton(
+    container,
+    "showtime-assignment",
+    "Gösteri Atama",
+    () => {
+      document.body.innerHTML = ""; // Mevcut içeriği temizle
+      renderShowtimeAssignmentView(cinemas, salons); // Gösteri atama ekranını render et
+    }
+  );
 
   document.body.appendChild(container);
-
-  // Butona olay dinleyicisi ekle
-  seatButton.addEventListener("click", () => {
-    if (!cinemas || cinemas.length === 0) {
-      console.error("Hata: 'cinemas' verisi geçerli değil!");
-      return;
-    }
-    console.log("Koltuk doluluk ayarlarına tıklandı.");
-    renderSeatOccupancySettings(cinemas); // seatsView.js içindeki fonksiyon
-  });
 }
 
 // Kullanıcı Panelini Render Etme
@@ -57,4 +91,13 @@ export function renderHeader(cinemas) {
     renderHeader(cinemas); // Header'ı tekrar render et
     renderUserPanel(cinemas); // Kullanıcı panelini render et
   };
+}
+
+// Ortak Buton Oluşturma Fonksiyonu
+function createButton(parent, id, text, onClick) {
+  const button = document.createElement("button");
+  button.id = id;
+  button.innerText = text;
+  button.addEventListener("click", onClick);
+  parent.appendChild(button);
 }

@@ -41,34 +41,100 @@ export function assignFilmsByCategory() {
   });
 }
 
-export function assignRandomFilmsToSalons() {
+export function assignRandomFilmsToSalons(cinemas) {
   cinemas.forEach((cinema) => {
-    cinema.salons.forEach((salon) => {
-      const randomFilm = films[Math.floor(Math.random() * films.length)];
-      salon.assignedFilm = randomFilm;
-      console.log(`Film '${randomFilm.name}' salon '${salon.name}' için rastgele atandı.`);
-    });
-  });
-}
+    // Bu sinema için atanmış filmleri takip etmek için bir dizi oluştur
+    const assignedFilms = new Set();
 
-export function assignOptimalFilmsToSalons() {
-  cinemas.forEach((cinema) => {
     cinema.salons.forEach((salon) => {
-      const categoryId = salon.seats > 150 ? 5 : salon.features.is3D ? 2 : 1;
-      const suitableFilms = films.filter((film) => film.categories.includes(categoryId));
-      suitableFilms.sort((a, b) => b.duration - a.duration);
+      // Kullanılabilir filmleri filtrele
+      const availableFilms = films.filter((film) => !assignedFilms.has(film.id));
 
-      if (suitableFilms.length > 0) {
-        salon.assignedFilm = suitableFilms[0];
+      if (availableFilms.length > 0) {
+        // Rastgele bir film seç
+        const randomFilm =
+          availableFilms[Math.floor(Math.random() * availableFilms.length)];
+
+        // Filmi salona ata ve atanmış filmler listesine ekle
+        salon.assignedFilm = randomFilm;
+        assignedFilms.add(randomFilm.id);
+
         console.log(
-          `Film '${suitableFilms[0].name}' salon '${salon.name}' için optimal olarak atandı.`
+          `Film '${randomFilm.name}' salon '${salon.name}' için rastgele atandı.`
         );
       } else {
-        console.warn(`Salon '${salon.name}' için uygun film bulunamadı!`);
+        console.warn(
+          `Sinema '${cinema.name}' için yeterli sayıda farklı film bulunamadı!`
+        );
+        salon.assignedFilm = null; // Hiçbir film atanmaz
       }
     });
   });
 }
+
+
+export function assignOptimalFilmsToSalons() {
+  // Tüm sinemalar üzerinde gezin
+  cinemas.forEach((cinema) => {
+    const assignedFilms = new Set(); // Bu sinema içindeki atanmış filmleri takip et
+
+    // Her salon için film ata
+    cinema.salons.forEach((salon) => {
+      // Salon özelliklerine göre kategori belirle
+      let categoryId;
+      if (salon.seats > 150) {
+        categoryId = 5; // Aksiyon
+      } else if (salon.features.is3D) {
+        categoryId = 2; // Bilim Kurgu
+      } else if (salon.features.isVIP) {
+        categoryId = 1; // Drama
+      } else {
+        categoryId = 6; // Animasyon
+      }
+
+      // Uygun filmleri filtrele
+      const suitableFilms = films
+        .filter((film) => film.categories.includes(categoryId))
+        .filter((film) => !assignedFilms.has(film.id)); // Bu sinema içinde daha önce atanmış mı?
+
+      // Eğer uygun film bulunursa süreye göre sıralama yap
+      suitableFilms.sort((a, b) => b.duration - a.duration);
+
+      if (suitableFilms.length > 0) {
+        // İlk filmi ata
+        const selectedFilm = suitableFilms[0];
+        salon.assignedFilm = selectedFilm; // Salona filmi ata
+        assignedFilms.add(selectedFilm.id); // Sinema içindeki atanmış filmler listesine ekle
+        console.log(`Film '${selectedFilm.name}' salon '${salon.name}' için optimal olarak atandı.`);
+      } else {
+        // Eğer uygun film bulunamazsa salonu boş bırak
+        salon.assignedFilm = null;
+        console.warn(`Salon '${salon.name}' için uygun film bulunamadı.`);
+      }
+    });
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export function renderFilmSelectionButtons() {
   // Önce 'output' öğesinin varlığını kontrol et, yoksa oluştur

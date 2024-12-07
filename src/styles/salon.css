@@ -94,6 +94,43 @@
   display: flex;
   justify-content: center;
 }
+#salon-assignment-view {
+  margin: 20px;
+}
+
+.assignment-button {
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.assignment-button:hover {
+  background-color: #0056b3;
+}
+
+#salon-list {
+  margin-top: 20px;
+}
+
+.cinema-section {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.salon-info {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
 
   
 

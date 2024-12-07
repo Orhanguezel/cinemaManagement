@@ -47,5 +47,42 @@ export function loadCinemaDataFromLocalStorage(cinemas) {
     }
   });
 
+  cinemas.forEach((cinema) => {
+    cinema.salons.forEach((salon) => {
+      if (savedData[cinema.name] && savedData[cinema.name][salon.name]) {
+        const savedSalon = savedData[cinema.name][salon.name];
+        salon.seatsList = savedSalon.seats || [];
+        salon.occupancyRate = savedSalon.occupancyRate || 0;
+        salon.film = savedSalon.film || null;
+      }
+    });
+  });
+  
+
+
   console.log("LocalStorage'dan minimal veriler yüklendi.");
+}
+
+export function saveCinemaDataToLocalStorage(cinemas) {
+  const dataToSave = cinemas.map((cinema) => ({
+    name: cinema.name,
+    salons: cinema.salons.map((salon) => ({
+      name: salon.name,
+      seatsList: salon.seatsList,
+      assignedFilm: salon.assignedFilm
+        ? {
+            id: salon.assignedFilm.id,
+            name: salon.assignedFilm.name,
+            duration: salon.assignedFilm.duration,
+            categories: salon.assignedFilm.categories,
+          }
+        : null,
+      features: salon.features,
+      seats: salon.seats,
+      price: salon.price,
+    })),
+  }));
+
+  saveToLocalStorage("cinemaData", dataToSave);
+  console.log("Sinema verileri localStorage'a kaydedildi!");
 }
