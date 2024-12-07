@@ -1,19 +1,56 @@
-// storageManager.js
-
+// Genel LocalStorage Kaydetme Fonksiyonu
 export function saveToLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
+// Genel LocalStorage Yükleme Fonksiyonu
 export function loadFromLocalStorage(key) {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : null;
 }
 
+// LocalStorage Temizleme Fonksiyonu
 export function clearLocalStorage() {
   localStorage.clear();
 }
 
-// Sadece seatsList ve occupancyRate kaydetmek için
+// Gösterim Saatlerini LocalStorage'a Kaydetme
+export function saveShowtimesToLocalStorage(cinemas) {
+  const showtimesData = cinemas.map((cinema) => ({
+    id: cinema.id,
+    salons: cinema.salons.map((salon) => ({
+      id: salon.id,
+      showtimes: salon.showtimes || [],
+    })),
+  }));
+  saveToLocalStorage("showtimes", showtimesData);
+  console.log("Gösterim saatleri LocalStorage'a kaydedildi.");
+}
+
+// LocalStorage'dan Gösterim Saatlerini Yükleme
+export function loadShowtimesFromLocalStorage(cinemas) {
+  const showtimesData = loadFromLocalStorage("showtimes");
+  if (!showtimesData) {
+    console.warn("LocalStorage'da gösterim saati verisi bulunamadı.");
+    return;
+  }
+
+  showtimesData.forEach((cinemaData) => {
+    const cinema = cinemas.find((c) => c.id === cinemaData.id);
+    if (cinema) {
+      cinemaData.salons.forEach((salonData) => {
+        const salon = cinema.salons.find((s) => s.id === salonData.id);
+        if (salon) {
+          salon.showtimes = salonData.showtimes;
+        }
+      });
+    }
+  });
+
+  console.log("Gösterim saatleri LocalStorage'dan yüklendi.");
+}
+
+// Salon Verilerini LocalStorage'a Kaydetme
 export function saveSalonDataToLocalStorage(cinemas) {
   const minimalData = cinemas.map((cinema) => ({
     name: cinema.name,
@@ -24,9 +61,10 @@ export function saveSalonDataToLocalStorage(cinemas) {
     })),
   }));
   saveToLocalStorage("cinemaData", minimalData);
+  console.log("Salon verileri LocalStorage'a kaydedildi.");
 }
 
-// LocalStorage'dan minimal veriyi geri yükleme
+// LocalStorage'dan Salon Verilerini Yükleme
 export function loadCinemaDataFromLocalStorage(cinemas) {
   const savedData = loadFromLocalStorage("cinemaData");
   if (!savedData) {
@@ -47,22 +85,10 @@ export function loadCinemaDataFromLocalStorage(cinemas) {
     }
   });
 
-  cinemas.forEach((cinema) => {
-    cinema.salons.forEach((salon) => {
-      if (savedData[cinema.name] && savedData[cinema.name][salon.name]) {
-        const savedSalon = savedData[cinema.name][salon.name];
-        salon.seatsList = savedSalon.seats || [];
-        salon.occupancyRate = savedSalon.occupancyRate || 0;
-        salon.film = savedSalon.film || null;
-      }
-    });
-  });
-  
-
-
-  console.log("LocalStorage'dan minimal veriler yüklendi.");
+  console.log("Salon verileri LocalStorage'dan yüklendi.");
 }
 
+// Sinema Verilerini LocalStorage'a Kaydetme
 export function saveCinemaDataToLocalStorage(cinemas) {
   const dataToSave = cinemas.map((cinema) => ({
     name: cinema.name,
@@ -84,5 +110,5 @@ export function saveCinemaDataToLocalStorage(cinemas) {
   }));
 
   saveToLocalStorage("cinemaData", dataToSave);
-  console.log("Sinema verileri localStorage'a kaydedildi!");
+  console.log("Sinema verileri LocalStorage'a kaydedildi!");
 }
