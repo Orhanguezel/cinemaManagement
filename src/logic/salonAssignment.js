@@ -4,22 +4,23 @@ import { salons } from "../data/Salons.js";
 // Sinemalara salon atama
 export function assignSalonsToCinemas() {
   cinemas.forEach((cinema) => {
-    const uniqueSalons = salons.slice(); // Salonların kopyası
-    const maxSalonsPerCinema = Math.min(4, uniqueSalons.length); // Her sinemaya max 4 salon atanabilir
+    const uniqueSalons = salons.slice();
+    const maxSalonsPerCinema = Math.min(4, uniqueSalons.length);
 
     cinema.salons = Array.from({ length: maxSalonsPerCinema }).map((_, index) => {
       const randomIndex = Math.floor(Math.random() * uniqueSalons.length);
-      const salonTemplate = uniqueSalons.splice(randomIndex, 1)[0]; // Benzersiz salon seçimi
+      const salonTemplate = uniqueSalons.splice(randomIndex, 1)[0];
       return {
         ...salonTemplate,
         id: `${cinema.id}-${index + 1}`,
         cinemaId: cinema.id,
-        seatsList: generateSeats(salonTemplate.seats), // Koltuk listesi oluştur
+        seatsList: generateSeats(salonTemplate.seats),
       };
     });
   });
   console.log("Salon atamaları tamamlandı:", cinemas);
 }
+
 
 // Koltuk listesi oluşturma fonksiyonu
 function generateSeats(seatCount) {

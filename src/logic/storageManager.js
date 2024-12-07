@@ -41,7 +41,7 @@ export function loadShowtimesFromLocalStorage(cinemas) {
       cinemaData.salons.forEach((salonData) => {
         const salon = cinema.salons.find((s) => s.id === salonData.id);
         if (salon) {
-          salon.showtimes = salonData.showtimes;
+          salon.showtimes = salonData.showtimes || [];
         }
       });
     }
@@ -56,17 +56,18 @@ export function saveSalonDataToLocalStorage(cinemas) {
     name: cinema.name,
     salons: cinema.salons.map((salon) => ({
       name: salon.name,
-      occupancyRate: salon.occupancyRate,
-      seatsList: salon.seatsList,
+      seatsList: salon.seatsList, // Koltuk listesi
+      occupancyRate: salon.occupancyRate || 0, // Doluluk oranı
+      showtimes: salon.showtimes || [], // Gösterim saatleri
     })),
   }));
-  saveToLocalStorage("cinemaData", minimalData);
+  localStorage.setItem("cinemaData", JSON.stringify(minimalData));
   console.log("Salon verileri LocalStorage'a kaydedildi.");
 }
 
 // LocalStorage'dan Salon Verilerini Yükleme
 export function loadCinemaDataFromLocalStorage(cinemas) {
-  const savedData = loadFromLocalStorage("cinemaData");
+  const savedData = JSON.parse(localStorage.getItem("cinemaData"));
   if (!savedData) {
     console.warn("LocalStorage'da sinema verisi bulunamadı.");
     return;
@@ -78,15 +79,16 @@ export function loadCinemaDataFromLocalStorage(cinemas) {
       savedCinema.salons.forEach((savedSalon) => {
         const salon = cinema.salons.find((s) => s.name === savedSalon.name);
         if (salon) {
-          salon.occupancyRate = savedSalon.occupancyRate;
-          salon.seatsList = savedSalon.seatsList;
+          salon.seatsList = savedSalon.seatsList || [];
+          salon.occupancyRate = savedSalon.occupancyRate || 0;
+          salon.showtimes = savedSalon.showtimes || [];
         }
       });
     }
   });
-
-  console.log("Salon verileri LocalStorage'dan yüklendi.");
+  console.log("Sinema verileri LocalStorage'dan yüklendi.");
 }
+
 
 // Sinema Verilerini LocalStorage'a Kaydetme
 export function saveCinemaDataToLocalStorage(cinemas) {
@@ -95,20 +97,76 @@ export function saveCinemaDataToLocalStorage(cinemas) {
     salons: cinema.salons.map((salon) => ({
       name: salon.name,
       seatsList: salon.seatsList,
-      assignedFilm: salon.assignedFilm
-        ? {
-            id: salon.assignedFilm.id,
-            name: salon.assignedFilm.name,
-            duration: salon.assignedFilm.duration,
-            categories: salon.assignedFilm.categories,
-          }
-        : null,
-      features: salon.features,
-      seats: salon.seats,
+      showtimes: salon.showtimes || [],
       price: salon.price,
+      features: salon.features,
     })),
   }));
 
-  saveToLocalStorage("cinemaData", dataToSave);
-  console.log("Sinema verileri LocalStorage'a kaydedildi!");
+  localStorage.setItem("cinemaData", JSON.stringify(dataToSave));
+  console.log("Sinema verileri LocalStorage'a kaydedildi.");
+}
+
+// LocalStorage'dan Sinema Verilerini Yükleme
+export function loadCinemaData(cinemas) {
+  const savedData = loadFromLocalStorage("cinemaData");
+  if (!savedData) {
+    console.warn("LocalStorage'da sinema verisi bulunamadı.");
+    return;
+  }
+
+  savedData.forEach((savedCinema) => {
+    const cinema = cinemas.find((c) => c.id === savedCinema.id);
+    if (cinema) {
+      savedCinema.salons.forEach((savedSalon) => {
+        const salon = cinema.salons.find((s) => s.id === savedSalon.id);
+        if (salon) {
+          salon.seatsList = savedSalon.seatsList || [];
+          salon.assignedFilm = savedSalon.assignedFilm || null;
+          salon.features = savedSalon.features || {};
+          salon.seats = savedSalon.seats || 0;
+          salon.price = savedSalon.price || 0;
+          salon.showtimes = savedSalon.showtimes || [];
+        }
+      });
+    }
+  });
+
+  console.log("Sinema verileri LocalStorage'dan yüklendi.");
+}
+
+// Koltuk Verilerini Local Storage'a Kaydet
+export function saveSeatsToLocalStorage(cinemas) {
+  const seatData = cinemas.map((cinema) => ({
+    id: cinema.id,
+    salons: cinema.salons.map((salon) => ({
+      id: salon.id,
+      seatsList: salon.seatsList || [],
+    })),
+  }));
+  saveToLocalStorage("seats", seatData);
+  console.log("Koltuk verileri LocalStorage'a kaydedildi.");
+}
+
+// Local Storage'dan Koltuk Verilerini Yükle
+export function loadSeatsFromLocalStorage(cinemas) {
+  const seatData = loadFromLocalStorage("seats");
+  if (!seatData) {
+    console.warn("LocalStorage'da koltuk verisi bulunamadı.");
+    return;
+  }
+
+  seatData.forEach((cinemaData) => {
+    const cinema = cinemas.find((c) => c.id === cinemaData.id);
+    if (cinema) {
+      cinemaData.salons.forEach((salonData) => {
+        const salon = cinema.salons.find((s) => s.id === salonData.id);
+        if (salon) {
+          salon.seatsList = salonData.seatsList;
+        }
+      });
+    }
+  });
+
+  console.log("Koltuk verileri LocalStorage'dan yüklendi.");
 }

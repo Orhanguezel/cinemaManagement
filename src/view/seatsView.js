@@ -1,6 +1,6 @@
 import { generateSeatsLayout } from "./seatsLayout.js";
 import { updateSalonOccupancy } from "../logic/seatManager.js";
-import { calculateSalonCapacity } from "../logic/salonAssignment.js"; // Salon kapasitesi hesaplama
+import { calculateSalonCapacity } from "../logic/salonAssignment.js";
 
 export function renderSeatOccupancySettings(cinemas) {
   if (!cinemas || cinemas.length === 0) {
@@ -8,71 +8,55 @@ export function renderSeatOccupancySettings(cinemas) {
     return;
   }
 
-  const container = document.getElementById("settings-container") || document.createElement("div");
-  container.id = "settings-container";
-  container.innerHTML = ""; // Eski içeriği temizle
+  // Ana konteyneri temizle veya oluştur
+  const mainContainer = document.getElementById("main-container");
+  if (!mainContainer) {
+    console.error("Ana konteyner bulunamadı. Yeni bir ana konteyner oluşturuluyor.");
+    const newContainer = document.createElement("div");
+    newContainer.id = "main-container";
+    document.body.appendChild(newContainer);
+  } else {
+    mainContainer.innerHTML = ""; // Önceki içerikleri temizle
+  }
 
-  // Rastgele uygula düğmesi
-  const randomButton = document.createElement("button");
-  randomButton.innerText = "Rastgele Uygula";
-  randomButton.className = "random-button";
-  randomButton.onclick = () => {
+  // Yeni içerik oluşturma
+  const contentHTML = `
+    <h2>Koltuk Doluluk Ayarları</h2>
+    <button id="random-seat-assignment" class="random-button">Rastgele Uygula</button>
+    ${cinemas
+      .map((cinema) => `
+        <div class="cinema-container">
+          <h3 class="cinema-title">${cinema.name}</h3>
+          ${cinema.salons
+            .map((salon) => `
+              <div class="salon-container">
+                <h4 class="salon-title">${salon.name} (Toplam Koltuk: ${salon.seatsList.length})</h4>
+                <p class="salon-info">
+                  <strong>Sinema:</strong> ${cinema.name} <br>
+                  <strong>Dolu Koltuk:</strong> ${salon.seatsList.filter((seat) => seat.status === "dolu").length} / ${salon.seatsList.length} <br>
+                  <strong>Doluluk Yüzdesi:</strong> ${((salon.seatsList.filter((seat) => seat.status === "dolu").length / salon.seatsList.length) * 100).toFixed(2)}%
+                </p>
+                <div class="salon-screen">Ekran</div>
+                <div class="seats-layout">${generateSeatsLayout(salon).outerHTML}</div>
+              </div>
+            `)
+            .join("")}
+        </div>
+      `)
+      .join("")}
+  `;
+
+  mainContainer.innerHTML = contentHTML;
+
+  // Rastgele atama düğmesi için olay dinleyici
+  document.getElementById("random-seat-assignment").onclick = () => {
     cinemas.forEach((cinema) => {
       cinema.salons.forEach((salon) => {
-        const randomRate = Math.floor(Math.random() * 101); // Rastgele oran
-        updateSalonOccupancy(salon, randomRate); // Oranı güncelle
+        salon.seatsList.forEach((seat) => {
+          seat.status = Math.random() > 0.5 ? "dolu" : "boş";
+        });
       });
     });
-    renderSeatOccupancySettings(cinemas); // Sayfayı yeniden render et
+    renderSeatOccupancySettings(cinemas); // Yeniden render et
   };
-
-  container.appendChild(randomButton);
-
-  cinemas.forEach((cinema) => {
-    const cinemaContainer = document.createElement("div");
-    cinemaContainer.className = "cinema-container";
-
-    // Sinema adı başlığı
-    const cinemaTitle = document.createElement("h3");
-    cinemaTitle.className = "cinema-title";
-    cinemaTitle.innerText = cinema.name;
-    cinemaContainer.appendChild(cinemaTitle);
-
-    cinema.salons.forEach((salon) => {
-      const salonContainer = document.createElement("div");
-      salonContainer.className = "salon-container";
-
-      const salonTitle = document.createElement("h4");
-      salonTitle.className = "salon-title";
-      salonTitle.innerText = `${salon.name} (Toplam Koltuk: ${salon.seatsList.length})`;
-
-      // Salon Bilgileri
-      const capacity = calculateSalonCapacity(salon); // Dolu koltuk sayısını ve toplam kapasiteyi hesapla
-      const salonInfo = document.createElement("p");
-      salonInfo.className = "salon-info";
-      salonInfo.innerHTML = `
-        <strong>Sinema:</strong> ${cinema.name} <br>
-        <strong>Dolu Koltuk:</strong> ${capacity.occupiedSeats} / ${capacity.totalSeats} <br>
-        <strong>Doluluk Yüzdesi:</strong> ${((capacity.occupiedSeats / capacity.totalSeats) * 100).toFixed(2)}%
-      `;
-
-      // Koltuk Yerleşimini Oluştur
-      const seatsLayout = generateSeatsLayout(salon);
-
-      const screenLabel = document.createElement("div");
-      screenLabel.className = "salon-screen";
-      screenLabel.innerText = "Ekran";
-
-      salonContainer.appendChild(salonTitle);
-      salonContainer.appendChild(salonInfo);
-      salonContainer.appendChild(screenLabel);
-      salonContainer.appendChild(seatsLayout);
-
-      cinemaContainer.appendChild(salonContainer);
-    });
-
-    container.appendChild(cinemaContainer);
-  });
-
-  document.body.appendChild(container);
 }

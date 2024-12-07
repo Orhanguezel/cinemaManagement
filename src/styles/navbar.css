@@ -1,0 +1,30 @@
+/* Navbar Stilleri */
+#navbar {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  #navbar button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  #navbar button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Genel Sayfa Düzeni */
+  #main-container {
+    padding: 20px;
+  }
+  

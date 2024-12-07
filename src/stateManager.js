@@ -10,6 +10,7 @@ export const state = {
   salons: null,
   salonsAssigned: false,
   seatsAssigned: false,
+  activeView: null, // Aktif sayfa bilgisi
 };
 
 // State kontrol fonksiyonu
@@ -55,6 +56,17 @@ export function initializeState() {
   }
 }
 
+// Aktif sayfayı değiştir
+export function setActiveView(viewName) {
+  state.activeView = viewName;
+  console.log(`Aktif görünüm değiştirildi: ${viewName}`);
+}
+
+// Aktif sayfayı kontrol et
+export function isActiveView(viewName) {
+  return state.activeView === viewName;
+}
+
 // State sıfırlama fonksiyonu
 export function resetState() {
   console.log("Uygulama durumu sıfırlanıyor...");
@@ -62,6 +74,7 @@ export function resetState() {
   state.salons = null;
   state.salonsAssigned = false;
   state.seatsAssigned = false;
+  state.activeView = null;
   console.log("Uygulama durumu sıfırlandı.");
 }
 

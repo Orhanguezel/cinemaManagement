@@ -1,24 +1,36 @@
 import { cinemas } from "../data/Cinemas.js";
-import { salons } from "../data/Salons.js";
 
+export function assignSeatsToSalons(cinemas) {
+  if (!cinemas || !Array.isArray(cinemas) || cinemas.length === 0) {
+    console.error("Hata: 'cinemas' verisi geçerli değil veya boş!");
+    return;
+  }
 
-export function assignSeatsToSalons() {
   cinemas.forEach((cinema) => {
-    cinema.salons.forEach((salon) => {
-      // Salon özelliklerini ata
-      const templateSalon = salons.find((s) => s.type === salon.type);
-      assignSalonProperties(salon, templateSalon);
+    if (!cinema.salons || !Array.isArray(cinema.salons) || cinema.salons.length === 0) {
+      console.warn(`Uyarı: ${cinema.name} sinemasında salon verisi bulunamadı.`);
+      return;
+    }
 
-      // Koltukları oluştur ve ata
-      salon.seatsList = createSeats(salon);
+    cinema.salons.forEach((salon) => {
+      if (!salon.seatsList || salon.seatsList.length === 0) {
+        salon.seatsList = createSeats(salon); // Koltukları oluştur ve ata
+      }
+      salon.occupancyRate = salon.occupancyRate || 0; // Başlangıç doluluk oranı
     });
   });
+
   console.log("Koltuk atamaları ve salon özellikleri tamamlandı!");
 }
 
 export function createSeats(salon) {
-  const totalSeats = salon.seats;
-  const rows = Math.ceil(totalSeats / 10); // Her satırda 10 koltuk
+  const totalSeats = salon.seats || 0;
+  if (totalSeats === 0) {
+    console.warn(`Uyarı: ${salon.name} salonunda toplam koltuk sayısı 0.`);
+    return [];
+  }
+
+  const rows = Math.ceil(totalSeats / 10);
   const seats = [];
   let seatIdCounter = 1;
 
@@ -26,16 +38,11 @@ export function createSeats(salon) {
     for (let number = 1; number <= 10; number++) {
       if (seatIdCounter > totalSeats) break;
 
-      // Koltuk adlandırması: A1, A2, B1, B2...
-      const seatLabel = `${String.fromCharCode(64 + row)}${number}`;
-
       seats.push({
-        id: `${salon.id}-${seatIdCounter}`,
-        row: String.fromCharCode(64 + row), // Harf sırası (A, B, C...)
-        number: number, // Koltuk numarası
-        label: seatLabel, // Tam ad: A1, B2 gibi
+        id: `${salon.name}-${seatIdCounter}`,
+        row: String.fromCharCode(64 + row), // A, B, C...
+        number,
         status: "boş",
-        price: salon.price,
       });
 
       seatIdCounter++;
@@ -44,8 +51,7 @@ export function createSeats(salon) {
   return seats;
 }
 
-
-
+// Bir salonun özelliklerini başka bir template salondan kopyalar
 export function assignSalonProperties(salon, templateSalon) {
   if (templateSalon) {
     salon.name = templateSalon.name;
@@ -54,24 +60,23 @@ export function assignSalonProperties(salon, templateSalon) {
     salon.price = templateSalon.price;
     salon.features = { ...templateSalon.features }; // Özellikleri kopyalar
   } else {
-    // Template salon bulunamazsa varsayılan değerler atanır
+    // Şablon salon bulunamazsa varsayılan değerler atanır
     salon.seats = salon.seats || 0;
     salon.price = 0;
     salon.features = { is3D: false, isVIP: false, sound: "Standart" };
   }
 }
 
-// Test etmek için varsayılan export
+// Test etmek için fonksiyonu çağır
 assignSeatsToSalons();
 
-// Test Çıktıları
+// Test çıktıları
 cinemas.forEach((cinema) => {
   console.log(`Sinema: ${cinema.name}`);
   cinema.salons.forEach((salon) => {
     console.log(`  Salon: ${salon.name}`);
-    console.log(`    Koltuk Sayısı: ${salon.seatsList.length}`);
+    console.log(`    Koltuk Sayısı: ${salon.seatsList ? salon.seatsList.length : 0}`);
     console.log(`    Özellikler:`, salon.features);
     console.log(`    Koltuklar:`, JSON.stringify(salon.seatsList, null, 2));
   });
 });
-

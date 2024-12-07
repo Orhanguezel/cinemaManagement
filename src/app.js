@@ -1,16 +1,16 @@
-// app.js
-import { renderSeatOccupancySettings } from "./view/seatsView.js";
 import { initializeCinemaData } from "./manager/cinemaManager.js";
-import { renderHeader } from "./view/panelView.js";
+import { renderNavbar, renderHeader } from "./view/panelView.js";
 import { cinemas } from "./data/Cinemas.js";
 import { salons } from "./data/Salons.js";
 
-let cinemaData = initializeCinemaData(cinemas, salons);
+// Sinema verilerini başlat
+const cinemaData = initializeCinemaData(cinemas, salons);
 
-// Uygulama başlatma
+// Yönetim paneli ve Navbar'ı oluştur
 if (cinemaData && cinemaData.length > 0) {
   renderHeader(cinemaData);
-  renderSeatOccupancySettings(cinemaData); // Koltuk doluluk ayarları
+  renderNavbar(cinemaData, salons);
+  console.log("Yönetim paneli başarıyla oluşturuldu!");
 } else {
-  console.error("Hata: Sinema verileri geçersiz!");
+  console.error("Hata: Sinema verileri başlatılamadı!");
 }

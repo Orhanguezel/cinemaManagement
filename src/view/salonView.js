@@ -3,82 +3,40 @@ import {
   assignOptimalSalonsToCinemas,
   assignRandomSalonsToCinemas,
 } from "../logic/salonLogic.js";
-import { cinemas } from "../data/Cinemas.js";
+import { renderDynamicContent } from "./panelView.js";
 
-// Salonları listeleme fonksiyonu
-function renderSalonList() {
-  const listContainer = document.getElementById("salon-list");
-  if (!listContainer) {
-    console.error("Salon listesi için bir konteyner bulunamadı!");
+export function renderSalonAssignmentView(cinemas, salons) {
+  if (!cinemas || cinemas.length === 0) {
+    console.error("Hata: Cinemas verisi geçerli değil!");
     return;
   }
 
-  listContainer.innerHTML = ""; // Eski listeyi temizle
-
-  cinemas.forEach((cinema) => {
-    const cinemaSection = document.createElement("div");
-    cinemaSection.className = "cinema-section";
-    cinemaSection.innerHTML = `<h3>${cinema.name}</h3>`;
-
-    if (cinema.salons && cinema.salons.length > 0) {
-      cinema.salons.forEach((salon) => {
-        const salonInfo = document.createElement("div");
-        salonInfo.className = "salon-info";
-        salonInfo.innerHTML = `
-          <p><strong>Salon Adı:</strong> ${salon.name}</p>
-          <p><strong>Toplam Koltuk:</strong> ${salon.seats}</p>
-          <p><strong>VIP:</strong> ${salon.features.isVIP ? "Evet" : "Hayır"}</p>
-          <p><strong>3D:</strong> ${salon.features.is3D ? "Evet" : "Hayır"}</p>
-          <p><strong>Ses Sistemi:</strong> ${salon.features.sound}</p>
-          <p><strong>Ücret Tarifesi:</strong> ${salon.price} €</p>
-        `;
-        cinemaSection.appendChild(salonInfo);
-      });
-    } else {
-      cinemaSection.innerHTML += "<p>Bu sinemaya henüz salon atanmamış.</p>";
-    }
-
-    listContainer.appendChild(cinemaSection);
-  });
-}
-
-// Salon Atama Panelini Render Et
-export function renderSalonAssignmentView() {
-  const mainContainer = document.createElement("div");
-  mainContainer.id = "salon-assignment-view";
-  mainContainer.innerHTML = `
+  const contentHTML = `
     <h2>Salon Atama Paneli</h2>
     <p>Salon atamalarını yapmak için aşağıdaki seçeneklerden birini seçebilirsiniz.</p>
-    <div id="button-container">
-      <button id="manual-button" class="assignment-button">Manuel Atama</button>
-      <button id="optimum-button" class="assignment-button">Optimum Atama</button>
-      <button id="random-button" class="assignment-button">Rastgele Atama</button>
+    <div>
+      <button id="manual-assignment">Manuel Atama</button>
+      <button id="optimal-assignment">Optimum Atama</button>
+      <button id="random-assignment">Rastgele Atama</button>
     </div>
-    <div id="salon-list"></div>
   `;
 
-  document.body.innerHTML = ""; // Mevcut içeriği temizle
-  document.body.appendChild(mainContainer);
+  // renderDynamicContent ile içeriği temizleyip yeni içeriği ekle
+  renderDynamicContent(contentHTML, "salon-assignment");
 
-  // Butonlara olay dinleyicileri ekle
-  document.getElementById("manual-button").onclick = () => {
-    assignManualSalonsToCinemas();
-    renderSalonList();
-    console.log("Manuel salon ataması tamamlandı!");
+  // Butonlar için olay dinleyiciler
+  document.getElementById("manual-assignment").onclick = () => {
+    assignManualSalonsToCinemas(cinemas, salons);
+    alert("Salonlar manuel olarak atandı!");
   };
 
-  document.getElementById("optimum-button").onclick = () => {
-    assignOptimalSalonsToCinemas();
-    renderSalonList();
-    console.log("Optimum salon ataması tamamlandı!");
+  document.getElementById("optimal-assignment").onclick = () => {
+    assignOptimalSalonsToCinemas(cinemas, salons);
+    alert("Salonlar optimum şekilde atandı!");
   };
 
-  document.getElementById("random-button").onclick = () => {
-    assignRandomSalonsToCinemas();
-    renderSalonList();
-    console.log("Rastgele salon ataması tamamlandı!");
+  document.getElementById("random-assignment").onclick = () => {
+    assignRandomSalonsToCinemas(cinemas, salons);
+    alert("Salonlar rastgele atandı!");
   };
-
-  // İlk yüklemede listeyi temizle
-  renderSalonList();
 }

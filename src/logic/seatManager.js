@@ -1,11 +1,29 @@
-export function assignSeatsRandomly(salon, occupancyRate) {
-  const totalSeats = salon.seatsList.length;
-  const seatsToOccupy = Math.floor((occupancyRate / 100) * totalSeats);
+// seatManager.js dosyası içerisinde koltuk işlemleri ile ilgili fonksiyonlar bulunmaktadır.
 
-  salon.seatsList.forEach((seat, index) => {
-    seat.status = index < seatsToOccupy ? "dolu" : "boş";
-  });
+export function assignSeatsRandomly(salon) {
+  const randomRate = Math.floor(Math.random() * 101); // 0-100 arasında rastgele oran
+  updateSalonOccupancy(salon, randomRate);
+  console.log(`Rastgele atama tamamlandı: Salon ${salon.name}, Doluluk Oranı: ${randomRate}%`);
 }
+
+
+export function assignSeatsOptimally(salon) {
+  let baseRate = 50; // Varsayılan doluluk oranı
+  if (salon.features.isVIP) baseRate += 20; // VIP salonlara ek doluluk
+  if (salon.features.is3D) baseRate += 10; // 3D salonlara ek doluluk
+
+  updateSalonOccupancy(salon, baseRate);
+  console.log(`Optimal atama tamamlandı: Salon ${salon.name}, Doluluk Oranı: ${baseRate}%`);
+}
+
+export function assignSeatsManually(salon, occupancyRate) {
+  updateSalonOccupancy(salon, occupancyRate); // Mevcut doluluk oranını uygula
+  console.log(`Manuel atama tamamlandı: Salon ${salon.name}, Doluluk Oranı: ${occupancyRate}%`);
+}
+
+
+
+
 
 export function updateSalonOccupancy(salon, rate) {
   if (!salon || !salon.seatsList || salon.seatsList.length === 0) {

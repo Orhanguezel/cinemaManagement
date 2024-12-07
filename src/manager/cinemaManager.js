@@ -1,24 +1,35 @@
-// cinemaManager.js
 import {
   loadCinemaDataFromLocalStorage,
-  saveSalonDataToLocalStorage,
+  saveCinemaDataToLocalStorage,
 } from "../logic/storageManager.js";
 import { assignSalonsToCinemas } from "../logic/salonAssignment.js";
 import { assignSeatsToSalons } from "../logic/seatAssignment.js";
+import { assignOptimalFilmsToSalons } from "../logic/filmAssignment.js";
 
+// Başlatma işlemleri
 export function initializeCinemaData(cinemas, salons) {
-  // Sinema verilerini LocalStorage'dan yükle
+  if (!cinemas || !Array.isArray(cinemas) || cinemas.length === 0) {
+    console.error("Hata: Sinema verileri geçerli değil veya boş!");
+    return [];
+  }
+
+  console.log("Uygulama başlatılıyor: Sinema verileri kontrol ediliyor...");
+
+  // LocalStorage'dan veri yükleme
   loadCinemaDataFromLocalStorage(cinemas);
 
-  // Eğer LocalStorage'da veri yoksa yeni veriler oluştur
+  // Eğer salon ve koltuk verisi yoksa, oluştur
   if (!cinemas.some((cinema) => cinema.salons && cinema.salons.length > 0)) {
+    console.log("LocalStorage'da veri bulunamadı. Yeni veriler oluşturuluyor...");
     assignSalonsToCinemas(cinemas, salons);
     assignSeatsToSalons(cinemas);
-    saveSalonDataToLocalStorage(cinemas); // İlk durumu kaydet
+    assignOptimalFilmsToSalons(cinemas);
+    saveCinemaDataToLocalStorage(cinemas); // Yeni veriyi kaydet
     console.log("Sinema ve salon verileri başarıyla başlatıldı!");
   } else {
-    console.log("Sinema verileri LocalStorage'dan yüklendi!");
+    console.log("Sinema ve salon verileri LocalStorage'dan yüklendi!");
   }
 
   return cinemas;
 }
+
