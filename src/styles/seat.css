@@ -1,0 +1,43 @@
+.salon-container {
+  margin: 20px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.seat-row {
+  display: flex;
+  justify-content: center;
+  margin: 5px 0;
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  margin: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.seat.occupied {
+  background-color: #e74c3c;
+  color: white;
+  cursor: not-allowed;
+}
+
+.seat.available {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.seat-row-label {
+  margin-right: 10px;
+  font-weight: bold;
+}

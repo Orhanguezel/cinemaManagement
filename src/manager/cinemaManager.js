@@ -1,32 +1,24 @@
-
+// cinemaManager.js
+import {
+  loadCinemaDataFromLocalStorage,
+  saveSalonDataToLocalStorage,
+} from "../logic/storageManager.js";
 import { assignSalonsToCinemas } from "../logic/salonAssignment.js";
-import { assignSeatsToSalons} from "../logic/seatAssignment.js";
-import { assignRandomOccupancy } from "./seatManager.js";
-import { assignOptimalFilmsToSalons } from "../logic/filmAssignment.js";
-import { cinemas } from "../data/Cinemas.js";
-import { salons } from "../data/Salons.js";
+import { assignSeatsToSalons } from "../logic/seatAssignment.js";
 
-export function initializeCinemaData() {
-  // Salonları sinemalara ata
-  assignSalonsToCinemas(cinemas, salons);
+export function initializeCinemaData(cinemas, salons) {
+  // Sinema verilerini LocalStorage'dan yükle
+  loadCinemaDataFromLocalStorage(cinemas);
 
-  // Salonlara koltuk ata
-  assignSeatsToSalons(cinemas);
-  
-// Koltukların doluluk oranını ayarla (örnek: %30 doluluk oranı)
-  assignRandomOccupancy(cinemas, 30);
+  // Eğer LocalStorage'da veri yoksa yeni veriler oluştur
+  if (!cinemas.some((cinema) => cinema.salons && cinema.salons.length > 0)) {
+    assignSalonsToCinemas(cinemas, salons);
+    assignSeatsToSalons(cinemas);
+    saveSalonDataToLocalStorage(cinemas); // İlk durumu kaydet
+    console.log("Sinema ve salon verileri başarıyla başlatıldı!");
+  } else {
+    console.log("Sinema verileri LocalStorage'dan yüklendi!");
+  }
 
-  // Filmleri optimal şekilde salonlara ata
-  assignOptimalFilmsToSalons(cinemas);
-
-  
-
-  console.log("Veriler başarıyla başlatıldı!");
   return cinemas;
-}
-
-
-// Belirli bir sinemayı ID'ye göre getir
-export function getCinemaById(cinemaId) {
-  return cinemas.find((cinema) => cinema.id === cinemaId);
 }
