@@ -15,7 +15,7 @@ export function renderNavbar() {
     <button id="film-tab">Filmler</button>
     <button id="showtime-tab">Gösterimler</button>
     <button id="analysis-tab">Analiz</button>
-    <button id="reset-data-tab">Verileri Sıfırla</button>
+    <button id="reset-data-tab">Reset</button>
   `;
 
   document.body.prepend(navbar);
