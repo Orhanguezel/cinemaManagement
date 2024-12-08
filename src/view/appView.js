@@ -1,22 +1,23 @@
-// appViews.js içerisindeki fonksiyonlar sayesinde uygulamanın başlangıç noktası olan initializeApp fonksiyonu oluşturulmuştur.
+import { loadStateFromLocalStorage, initializeState, saveStateToLocalStorage } from "./stateManager.js";
+import { renderNavbar, renderHeader } from "./panelView.js";
+import { renderAdminPanel } from "./panelView.js";
 
-import { renderHeader } from "./headerView.js";
-import { renderAdminPanel, renderUserPanel } from "./panelView.js";
-
-export function initializeApp(cinemas) {
-  // Header'ı render et
-  renderHeader(cinemas);
-
-  // Header yüklendikten sonra butonları seç
-  const adminButton = document.getElementById("admin-view");
-
-  if (adminButton) {
-    adminButton.onclick = () => {
-      document.body.innerHTML = ""; // Sayfayı temizle
-      renderHeader(cinemas);
-      renderAdminPanel(cinemas);
-    };
-  } else {
-    console.error("'admin-view' butonu bulunamadı. Header düzgün render edilmemiş olabilir.");
+// Uygulama başlatma
+document.addEventListener("DOMContentLoaded", () => {
+  // State'i yükle veya başlat
+  try {
+    loadStateFromLocalStorage();
+    console.log("State başarıyla LocalStorage'dan yüklendi.");
+  } catch (error) {
+    console.warn("State yüklenemedi, başlatılıyor...");
+    initializeState();
   }
-}
+
+  // Header ve Navbar'ı render et
+  renderHeader();
+  renderNavbar(state.cinemas, state.salons);
+
+  // Yönetici panelini başlat
+  renderAdminPanel(state.cinemas, state.salons);
+});
+

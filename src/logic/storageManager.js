@@ -141,12 +141,19 @@ export function saveSeatsToLocalStorage(cinemas) {
     id: cinema.id,
     salons: cinema.salons.map((salon) => ({
       id: salon.id,
-      seatsList: salon.seatsList || [],
+      seatsList: salon.seatsList.map((seat) => ({
+        id: seat.id,
+        row: seat.row,
+        number: seat.number,
+        status: seat.status,
+        price: seat.price,
+      })),
     })),
   }));
   saveToLocalStorage("seats", seatData);
   console.log("Koltuk verileri LocalStorage'a kaydedildi.");
 }
+
 
 // Local Storage'dan Koltuk Verilerini Yükle
 export function loadSeatsFromLocalStorage(cinemas) {
@@ -162,7 +169,13 @@ export function loadSeatsFromLocalStorage(cinemas) {
       cinemaData.salons.forEach((salonData) => {
         const salon = cinema.salons.find((s) => s.id === salonData.id);
         if (salon) {
-          salon.seatsList = salonData.seatsList;
+          salon.seatsList = salonData.seatsList.map((seat) => ({
+            id: seat.id,
+            row: seat.row,
+            number: seat.number,
+            status: seat.status,
+            price: seat.price,
+          }));
         }
       });
     }
@@ -170,3 +183,4 @@ export function loadSeatsFromLocalStorage(cinemas) {
 
   console.log("Koltuk verileri LocalStorage'dan yüklendi.");
 }
+

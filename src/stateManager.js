@@ -1,8 +1,8 @@
-// stateManager.js
 import { cinemas } from "./data/Cinemas.js";
 import { salons } from "./data/Salons.js";
 import { assignSalonsToCinemas } from "./logic/salonAssignment.js";
 import { assignSeatsToSalons } from "./logic/seatAssignment.js";
+import { saveToLocalStorage, loadFromLocalStorage } from "./logic/storageManager.js";
 
 // Uygulama durumunu yönetmek için global state objesi
 export const state = {
@@ -37,6 +37,41 @@ export function checkState(step) {
   }
 }
 
+// LocalStorage'dan State Yükleme
+export function loadStateFromLocalStorage() {
+  console.log("LocalStorage'dan uygulama durumu yükleniyor...");
+  const savedCinemas = loadFromLocalStorage("cinemas");
+  const savedSalons = loadFromLocalStorage("salons");
+
+  if (savedCinemas) {
+    state.cinemas = savedCinemas;
+    state.salonsAssigned = true;
+  } else {
+    console.warn("LocalStorage'da sinema verisi bulunamadı.");
+    state.cinemas = cinemas;
+  }
+
+  if (savedSalons) {
+    state.salons = savedSalons;
+  } else {
+    console.warn("LocalStorage'da salon verisi bulunamadı.");
+    state.salons = salons;
+  }
+
+  state.seatsAssigned = !!state.cinemas.find(
+    (cinema) => cinema.salons && cinema.salons.some((salon) => salon.seatsList)
+  );
+  console.log("LocalStorage'dan uygulama durumu yüklendi.");
+}
+
+// LocalStorage'a State Kaydetme
+export function saveStateToLocalStorage() {
+  console.log("Uygulama durumu LocalStorage'a kaydediliyor...");
+  saveToLocalStorage("cinemas", state.cinemas);
+  saveToLocalStorage("salons", state.salons);
+  console.log("Uygulama durumu LocalStorage'a kaydedildi.");
+}
+
 // Salon ve koltuk atama işlemlerini başlatan fonksiyon
 export function initializeState() {
   try {
@@ -50,6 +85,7 @@ export function initializeState() {
     assignSeatsToSalons(state.cinemas);
     state.seatsAssigned = true;
 
+    saveStateToLocalStorage(); // Başlangıç durumu kaydet
     console.log("Uygulama durumu başarıyla başlatıldı!");
   } catch (error) {
     console.error("Başlatma sırasında hata oluştu:", error);
@@ -75,6 +111,8 @@ export function resetState() {
   state.salonsAssigned = false;
   state.seatsAssigned = false;
   state.activeView = null;
+  saveToLocalStorage("cinemas", null);
+  saveToLocalStorage("salons", null);
   console.log("Uygulama durumu sıfırlandı.");
 }
 
