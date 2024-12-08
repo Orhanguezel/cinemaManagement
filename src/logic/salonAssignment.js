@@ -1,26 +1,31 @@
+// salonAssignment.js
 import { cinemas } from "../data/Cinemas.js";
 import { salons } from "../data/Salons.js";
 
-// Sinemalara salon atama
+// Sinemalara salon atama (dinamik ID oluşturma)
 export function assignSalonsToCinemas() {
   cinemas.forEach((cinema) => {
-    const uniqueSalons = salons.slice();
-    const maxSalonsPerCinema = Math.min(4, uniqueSalons.length);
+    const uniqueSalons = salons.slice(); // Salon tiplerini kopyala
+    const maxSalonsPerCinema = Math.min(4, uniqueSalons.length); // Max 4 salon
 
     cinema.salons = Array.from({ length: maxSalonsPerCinema }).map((_, index) => {
       const randomIndex = Math.floor(Math.random() * uniqueSalons.length);
-      const salonTemplate = uniqueSalons.splice(randomIndex, 1)[0];
-      return {
-        ...salonTemplate,
-        id: `${cinema.id}-${index + 1}`,
-        cinemaId: cinema.id,
-        seatsList: generateSeats(salonTemplate.seats),
-      };
+      const salonTemplate = uniqueSalons.splice(randomIndex, 1)[0]; // Rastgele bir salon tipi seç
+      return createSalonFromTemplate(cinema.id, salonTemplate, index + 1); // Dinamik salon oluştur
     });
   });
   console.log("Salon atamaları tamamlandı:", cinemas);
 }
 
+// Salon tipi şablonundan dinamik salon oluşturma
+function createSalonFromTemplate(cinemaId, salonTemplate, index) {
+  return {
+    ...salonTemplate,
+    id: `${cinemaId}-${salonTemplate.type}-${index}`, // Benzersiz ID
+    cinemaId: cinemaId,
+    seatsList: generateSeats(salonTemplate.seats), // Koltuk listesi oluştur
+  };
+}
 
 // Koltuk listesi oluşturma fonksiyonu
 function generateSeats(seatCount) {
@@ -41,19 +46,21 @@ function generateSeats(seatCount) {
   return seats;
 }
 
+
 // Belirli bir sinemanın salonlarını listele
 export function listSalonsByCinema(cinemaId) {
   const cinema = cinemas.find((c) => c.id === cinemaId);
   if (!cinema) {
-    console.log(`Sinema bulunamadı: ID ${cinemaId}`);
+    console.error(`Sinema bulunamadı: ID ${cinemaId}`);
     return;
   }
 
   console.log(`Sinemadaki Salonlar - ${cinema.name}:`);
   cinema.salons.forEach((salon) => {
-    console.log(`Salon ID: ${salon.id}, Adı: ${salon.name}`);
+    console.log(`Salon ID: ${salon.id}, Adı: ${salon.name}, Kapasite: ${salon.seats}`);
   });
 }
+
 
 // Bir salonun hangi sinemaya ait olduğunu bul
 export function findCinemaBySalon(salonId) {
@@ -64,8 +71,9 @@ export function findCinemaBySalon(salonId) {
       return cinema;
     }
   }
-  console.log(`Salon bulunamadı: ID ${salonId}`);
+  console.error(`Salon bulunamadı: ID ${salonId}`);
 }
+
 
 // Her salonun kapasitesini hesaplayan fonksiyon
 export function calculateSalonCapacity(salon) {

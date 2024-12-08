@@ -1,0 +1,85 @@
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  form label {
+    font-weight: bold;
+  }
+  
+  form input, form textarea {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  form button:hover {
+    background-color: #0056b3;
+  }
+  
+
+  form select {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    height: auto;
+    min-height: 50px;
+  }
+  
+  form select[multiple] {
+    height: auto;
+    max-height: 150px;
+    overflow-y: scroll;
+  }
+  
+
+  .cinema-logo-preview, .cinema-background-preview {
+    width: 150px;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  form select {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    height: auto;
+    min-height: 50px;
+  }
+  form select[multiple] {
+    height: auto;
+    max-height: 150px;
+    overflow-y: scroll;
+  }
+
+  .cinema-info button {
+    margin-right: 10px;
+  }
+  
+  .cinema-info button:last-child {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .cinema-info button:last-child:hover {
+    background-color: #a71d2a;
+  }
+  
+  

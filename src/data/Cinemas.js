@@ -37,6 +37,7 @@ export const cinemas = [
     "030-1234567",
     "berlin@cinegrup.com",
     "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_BERLIN",
+    [salons[0], salons[1], salons[2], salons[3], salons[4], salons[5]]
   ),
   new Cinema(
     2,
@@ -47,7 +48,8 @@ export const cinemas = [
     "./assets/backgrounds/cinekoln-bg.jpg",
     "0221-9876543",
     "koln@cinegrup.com",
-    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_KOLN"
+    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_KOLN",
+    [salons[3], salons[4], salons[5]]
   ),
   new Cinema(
     3,
@@ -58,7 +60,8 @@ export const cinemas = [
     "./assets/backgrounds/cinehamburg-bg.jpg",
     "040-4567890",
     "hamburg@cinegrup.com",
-    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_HAMBURG"
+    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_HAMBURG",
+    [salons[2], salons[3], salons[4]]
   ),
   new Cinema(
     4,
@@ -69,7 +72,9 @@ export const cinemas = [
     "./assets/backgrounds/cinemunich-bg.jpg",
     "089-6543210",
     "munich@cinegrup.com",
-    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_MUNICH"
+    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_MUNICH",
+    [salons[1], salons[3], salons[4], salons[5]]
+
   ),
   new Cinema(
     5,
@@ -80,7 +85,9 @@ export const cinemas = [
     "./assets/backgrounds/cinestuttgart-bg.jpg",
     "0711-1234567",
     "stuttgart@cinegrup.com",
-    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_STUTTGART"
+    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_STUTTGART",
+    [salons[0], salons[1], salons[4], salons[5]]
+
   ),
   new Cinema(
     6,
@@ -91,7 +98,8 @@ export const cinemas = [
     "./assets/backgrounds/cinefrankfurt-bg.jpg",
     "069-9876543",
     "frankfurt@cinegrup.com",
-    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_FRANKFURT"
+    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_FRANKFURT",
+    [salons[2], salons[3], salons[4], salons[5]]
   ),
   new Cinema(
     7,
@@ -102,7 +110,8 @@ export const cinemas = [
     "./assets/backgrounds/cinedusseldorf-bg.jpg",
     "0211-1234567",
     "dusseldorf@cinegrup.com",
-    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_DUSSELDORF"
+    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_DUSSELDORF",
+    [salons[0], salons[1], salons[3], salons[5]]
   ),
   new Cinema(
     8,
@@ -113,7 +122,8 @@ export const cinemas = [
     "./assets/backgrounds/cineleipzig-bg.jpg",
     "0341-9876543",
     "leipzig@cinegrup.com",
-    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_LEIPZIG"
+    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_LEIPZIG",
+    [salons[0], salons[3], salons[4], salons[5]]
   ),
   new Cinema(
     9,
@@ -124,7 +134,8 @@ export const cinemas = [
     "./assets/backgrounds/cinebremen-bg.jpg",
     "0421-1234567",
     "bremen@cinegrup.com",
-    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_BREMEN"
+    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_BREMEN",
+    [salons[0], salons[1], salons[2], salons[3], salons[4]]
   ),
   new Cinema(
     10,
@@ -135,6 +146,7 @@ export const cinemas = [
     "./assets/backgrounds/cinehannover-bg.jpg",
     "0511-9876543",
     "hannover@cinegrup.com",
-    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_HANNOVER"
+    "https://www.google.com/maps/embed?pb=PLACEHOLDER_FOR_HANNOVER",
+    [salons[0], salons[1], salons[2], salons[3], salons[5]]
   ),
 ];

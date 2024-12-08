@@ -1,8 +1,32 @@
-import { renderSeatOccupancySettings } from "./seatsView.js";
 import { renderSalonAssignmentView } from "./salonView.js";
 import { renderFilmAssignmentView } from "./filmView.js";
 import { renderShowtimeAssignmentView } from "./showtimeView.js";
+import { renderSeatOccupancySettings } from "./seatsView.js";
 import { renderAnalysisView } from "./analysisView.js";
+
+export function renderNavbar() {
+  const navbar = document.createElement("nav");
+  navbar.id = "navbar";
+  navbar.innerHTML = `
+    <button id="salon-assignment">Salon Atama</button>
+    <button id="film-assignment" disabled>Film Atama</button>
+    <button id="showtime-assignment" disabled>Gösterim Atama</button>
+    <button id="seat-settings" disabled>Koltuk Doluluk</button>
+    <button id="analysis-reports" disabled>Analiz</button>
+  `;
+  document.body.appendChild(navbar);
+
+  document.getElementById("salon-assignment").onclick = renderSalonAssignmentView;
+  document.getElementById("film-assignment").onclick = renderFilmAssignmentView;
+  document.getElementById("showtime-assignment").onclick = renderShowtimeAssignmentView;
+  document.getElementById("seat-settings").onclick = renderSeatOccupancySettings;
+  document.getElementById("analysis-reports").onclick = renderAnalysisView;
+}
+
+
+
+
+
 
 
 
@@ -29,49 +53,17 @@ export function renderHeader(cinemas) {
 }
 
 
-// Header'ı Render Etme
-export function renderNavbar(cinemas, salons) {
-  const navbar = document.getElementById("navbar") || document.createElement("nav");
-  navbar.id = "navbar";
-  navbar.innerHTML = `
-    <button id="seat-settings">Koltuk Atama</button>
-    <button id="film-assignment">Film Atama</button>
-    <button id="salon-assignment">Salon Atama</button>
-    <button id="showtime-assignment">Gösteri Atama</button>
-    <button id="analysis-reports">Analiz</button>
-  `;
-  document.body.insertBefore(navbar, document.body.firstChild);
-
-  // Navbar Buton Olayları
-  document.getElementById("seat-settings").onclick = () => {
-    renderDynamicContent("", "seat-settings"); // Ana konteyneri temizle
-    renderSeatOccupancySettings(cinemas);
-  };
-
-  document.getElementById("film-assignment").onclick = () => {
-    renderDynamicContent("", "film-assignment"); // Ana konteyneri temizle
-    renderFilmAssignmentView(cinemas);
-  };
-
-  document.getElementById("salon-assignment").onclick = () => {
-    renderDynamicContent("", "salon-assignment"); // Ana konteyneri temizle
-    renderSalonAssignmentView(cinemas, salons);
-  };
-
-  document.getElementById("showtime-assignment").onclick = () => {
-    renderDynamicContent("", "showtime-assignment"); // Ana konteyneri temizle
-    renderShowtimeAssignmentView(cinemas, salons);
-  };
-
-  document.getElementById("analysis-reports").onclick = () => {
-    renderDynamicContent("", "analysis-reports"); // Ana konteyneri temizle
-    renderAnalysisView(cinemas);
-  };
+// Adım butonlarını aktif hale getiren yardımcı fonksiyon
+export function enableStep(stepId) {
+  const button = document.getElementById(stepId);
+  if (button) button.disabled = false;
 }
 
 
+
+
+
 export function renderDynamicContent(contentHTML, activeSectionId) {
-  // Ana konteyner kontrolü
   let container = document.getElementById("main-container");
   if (!container) {
     console.error("Ana konteyner bulunamadı! Yeni bir ana konteyner oluşturuluyor.");
@@ -87,12 +79,13 @@ export function renderDynamicContent(contentHTML, activeSectionId) {
   const navbar = document.getElementById("navbar");
   if (navbar) {
     navbar.querySelectorAll("button").forEach((button) => {
-      button.classList.remove("active"); // Eski aktif durumu kaldır
+      button.classList.remove("active");
     });
     const activeButton = document.getElementById(activeSectionId);
     if (activeButton) activeButton.classList.add("active");
   }
 }
+
 
 
 

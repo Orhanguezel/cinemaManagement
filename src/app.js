@@ -1,16 +1,27 @@
-import { initializeCinemaData } from "./manager/cinemaManager.js";
-import { renderNavbar, renderHeader } from "./view/panelView.js";
-import { cinemas } from "./data/Cinemas.js";
-import { salons } from "./data/Salons.js";
+import { renderNavbar } from "./navbar.js";
+import { renderCinemaView } from "./cinemaView.js";
+import { renderSalonView } from "./salonView.js";
 
-// Sinema verilerini başlat
-const cinemaData = initializeCinemaData(cinemas, salons);
+// Uygulama başlatma
+document.addEventListener("DOMContentLoaded", () => {
+  const appContainer = document.getElementById("app");
 
-// Yönetim paneli ve Navbar'ı oluştur
-if (cinemaData && cinemaData.length > 0) {
-  renderHeader(cinemaData);
-  renderNavbar(cinemaData, salons);
-  console.log("Yönetim paneli başarıyla oluşturuldu!");
-} else {
-  console.error("Hata: Sinema verileri başlatılamadı!");
-}
+  appContainer.innerHTML = `
+    <header>
+      <h1>Kino-Ticket Yönetim Paneli</h1>
+    </header>
+    <main id="main-content">
+      <div id="start-screen">
+        <p>Yönetim paneline hoş geldiniz. Başlamak için aşağıdaki butona tıklayın.</p>
+        <button id="start-button">Başla</button>
+      </div>
+    </main>
+  `;
+
+  document.getElementById("start-button").onclick = () => {
+    renderNavbar(); // Navbar'ı yükle
+    renderCinemaView(); // İlk görünümü yükle
+  };
+});
+
+

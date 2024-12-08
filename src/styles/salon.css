@@ -1,177 +1,19 @@
-.salon-container {
-    margin: 20px 0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  button {
-    margin: 5px;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-
-  
-#settings-container {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 10px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.cinema-title {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-  color: #333;
-}
-
-.salon-container {
-  margin: 20px 0;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background-color: #f5f5f5;
-}
-
-.salon-title {
-  font-size: 1.2rem;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.salon-screen {
-  text-align: center;
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 15px;
-  font-weight: bold;
-}
-
-.salon-info {
-  margin-bottom: 15px;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.seats-layout {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 5px;
-}
-
-.seat {
-  text-align: center;
-  padding: 10px;
-  border-radius: 3px;
-  color: #fff;
-  font-weight: bold;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-.seat.available {
-  background-color: #4caf50;
-}
-
-.seat.occupied {
-  background-color: #f44336;
-}
-
-.seat-row {
+.salon-cards {
   display: flex;
-  justify-content: center;
-}
-#salon-assignment-view {
-  margin: 20px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.assignment-button {
-  margin: 10px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.assignment-button:hover {
-  background-color: #0056b3;
-}
-
-#salon-list {
-  margin-top: 20px;
-}
-
-.cinema-section {
-  margin-bottom: 20px;
-  padding: 10px;
+.salon-card {
   border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 250px;
 }
 
-.salon-info {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
-}
-
-  
-
-/* Responsif Tarz */
-@media screen and (max-width: 768px) {
-  .seats-layout {
-    grid-template-columns: repeat(5, 1fr); /* Daha küçük ekranlarda 5 sütun */
-    gap: 4px;
-  }
-
-  .seat {
-    padding: 8px; /* Koltuk boyutlarını küçült */
-    font-size: 0.8rem;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .seats-layout {
-    grid-template-columns: repeat(3, 1fr); /* En küçük ekranlarda 3 sütun */
-    gap: 3px;
-  }
-
-  .seat {
-    padding: 6px; /* Koltuk boyutlarını daha da küçült */
-    font-size: 0.7rem;
-  }
-
-  .salon-title {
-    font-size: 1rem;
-  }
-
-  .cinema-title {
-    font-size: 1.2rem;
-  }
-
-  .salon-screen {
-    font-size: 0.9rem;
-    padding: 8px;
-  }
-
-  .salon-info {
-    font-size: 0.8rem;
-  }
+.salon-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
 }

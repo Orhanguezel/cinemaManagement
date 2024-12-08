@@ -109,16 +109,28 @@ function generateSeats(seatCount) {
   return seats;
 }
 
-
 // Rastgele Salon Atama
 export function assignRandomSalonsToCinemas() {
+  if (!cinemas || cinemas.length === 0) {
+    console.error("Sinema verisi bulunamadı!");
+    return;
+  }
+
+  if (!salons || salons.length === 0) {
+    console.error("Salon verisi bulunamadı!");
+    return;
+  }
+
   cinemas.forEach((cinema) => {
     const shuffledSalons = salons.slice().sort(() => 0.5 - Math.random()); // Rastgele sırala
-    cinema.salons = shuffledSalons.slice(0, 3).map((salon, index) => ({
+    const numSalonsToAssign = Math.min(shuffledSalons.length, 3); // Atanacak salon sayısı
+    cinema.salons = shuffledSalons.slice(0, numSalonsToAssign).map((salon, index) => ({
       ...salon,
       id: `${cinema.id}-${index + 1}`,
       cinemaId: cinema.id,
+      seatsList: salon.seatsList || generateSeats(salon.seats), // Koltuk listesi
     }));
   });
+
   console.log("Rastgele salon ataması tamamlandı:", cinemas);
 }
