@@ -33,6 +33,21 @@ export function renderShowtimeView() {
   // Sayfa temel yapısı
   container.innerHTML = `
     <h2>Gösterimler</h2>
+    
+
+
+    <div class="showtime-controls">
+      <h3>Toplu Gösterim Atama</h3>
+      <button onclick="assignRandomFilms()">Rastgele Atama</button>
+      <button onclick="assignOptimalFilms()">Optimal Atama</button>
+    </div>
+    <div class="current-showtimes-section">
+      <h3>Mevcut Gösterimler</h3>
+      <div id="current-showtimes">
+        ${renderGroupedShowtimes()}
+      </div>
+    </div>
+
     <div class="add-showtime-section">
       <h3>Yeni Gösterim Ekle</h3>
       <form id="add-showtime-form">
@@ -59,17 +74,7 @@ export function renderShowtimeView() {
         <button type="button" onclick="addShowtime()">Kaydet</button>
       </form>
     </div>
-    <div class="showtime-controls">
-      <h3>Toplu Gösterim Atama</h3>
-      <button onclick="assignRandomFilms()">Rastgele Atama</button>
-      <button onclick="assignOptimalFilms()">Optimal Atama</button>
-    </div>
-    <div class="current-showtimes-section">
-      <h3>Mevcut Gösterimler</h3>
-      <div id="current-showtimes">
-        ${renderGroupedShowtimes()}
-      </div>
-    </div>
+
   `;
 
   // Dinamik olarak salonları güncelle

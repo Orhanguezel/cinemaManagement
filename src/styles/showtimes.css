@@ -1,182 +1,229 @@
-/* Genel stil ayarları */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
-}
-
-h2 {
-  text-align: center;
-  margin-top: 20px;
-  color: #333;
-}
-
-/* Form stili */
-form {
-  background-color: #ffffff;
-  border-radius: 8px;
+/* Gösterim Konteyner */
+.add-showtime-section {
   padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 90%;
   max-width: 600px;
 }
 
-form label {
-  display: block;
-  margin-bottom: 8px;
+/* Başlık */
+.add-showtime-section h3 {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form Elemanları */
+#add-showtime-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#add-showtime-form label {
   font-weight: bold;
+  font-size: 0.9rem;
+  color: #444;
 }
 
-form input,
-form select,
-form button {
-  width: 100%;
+#add-showtime-form select,
+#add-showtime-form input[type="time"] {
   padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-form button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-form button:hover {
-  background-color: #0056b3;
-}
-
-/* Tablo stili */
-table {
-  width: 95%;
-  margin: 20px auto;
-  border-collapse: collapse;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-table thead {
-  background-color: #007bff;
-  color: white;
-}
-
-table th,
-table td {
-  padding: 12px;
-  text-align: left;
+  font-size: 0.9rem;
   border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
 
-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-table tr:hover {
-  background-color: #f5f5f5;
-}
-
-/* Düğme stilleri */
-button {
-  padding: 10px 20px;
-  margin: 5px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button.edit-btn {
-  background-color: #ffc107;
-  color: #ffffff;
-}
-
-button.edit-btn:hover {
-  background-color: #e0a800;
-}
-
-button.delete-btn {
-  background-color: #dc3545;
-  color: #ffffff;
-}
-
-button.delete-btn:hover {
-  background-color: #c82333;
-}
-
-button.add-btn {
-  background-color: #28a745;
-  color: #ffffff;
-}
-
-button.add-btn:hover {
-  background-color: #218838;
-}
-
-/* Gösterim kartları */
-.cinema-cards {
+/* Saat Listesi */
+#showtime-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.cinema-card {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 250px;
-  padding: 15px;
+.showtime-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #f1f1f1;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.showtime-item span {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.showtime-item button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.showtime-item button:hover {
+  background-color: #d32f2f;
+}
+
+/* Form Butonları */
+#add-showtime-form button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#add-showtime-form button:hover {
+  background-color: #45a049;
+}
+
+
+/* Toplu Gösterim Atama */
+.showtime-controls {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 400px;
   text-align: center;
 }
 
-.cinema-card h3 {
+.showtime-controls h3 {
+  font-size: 1.3rem;
   color: #333;
-  font-size: 18px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-.cinema-card p {
-  color: #555;
-  font-size: 14px;
-  margin-bottom: 8px;
+.showtime-controls button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  margin: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.cinema-card button {
-  width: 100%;
-  margin: 0;
-  font-size: 14px;
+.showtime-controls button:hover {
+  background-color: #0056b3;
 }
 
-/* Bölüm ve tablo düzenlemeleri */
-.add-showtime-section,
-.showtime-controls {
-  margin: 20px auto;
-  width: 90%;
-  max-width: 1200px;
-}
-
+/* Mevcut Gösterimler */
 .current-showtimes-section {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
-  width: 90%;
-  max-width: 1200px;
+  max-width: 800px;
 }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
+/* Tablo */
+.current-showtimes-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.current-showtimes-section th,
+.current-showtimes-section td {
   text-align: left;
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
 }
 
-th {
-  background-color: #007BFF;
+.current-showtimes-section th {
+  background-color: #4caf50;
+  color: white;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.current-showtimes-section td {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Aksiyon Butonları */
+.current-showtimes-section .action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.current-showtimes-section .action-buttons button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.current-showtimes-section .edit-button {
+  background-color: #007bff;
   color: white;
 }
 
-.edit-btn,
-.delete-btn {
-  margin-right: 5px;
+.current-showtimes-section .edit-button:hover {
+  background-color: #0056b3;
+}
+
+.current-showtimes-section .delete-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.current-showtimes-section .delete-button:hover {
+  background-color: #d32f2f;
+}
+
+
+@media (max-width: 768px) {
+  .add-showtime-section,
+  .showtime-controls,
+  .current-showtimes-section {
+      max-width: 100%;
+      padding: 15px;
+  }
+
+  #add-showtime-form label,
+  #add-showtime-form select,
+  #add-showtime-form input[type="time"],
+  .current-showtimes-section th,
+  .current-showtimes-section td {
+      font-size: 0.8rem;
+  }
+
+  .current-showtimes-section .action-buttons button {
+      padding: 5px;
+      font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .showtime-controls button {
+      width: 100%;
+      margin: 5px 0;
+  }
+
+  .current-showtimes-section .action-buttons {
+      flex-direction: column;
+      align-items: flex-start;
+  }
 }

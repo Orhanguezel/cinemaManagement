@@ -1,3 +1,5 @@
+// app.js
+
 import { renderNavbar } from "./navbar.js";
 import { renderCinemaView } from "./cinemaView.js";
 

@@ -1,30 +1,121 @@
-/* Navbar Stilleri */
+/* Navbar Ana Yapı */
 #navbar {
-    background-color: #333;
-    color: white;
-    padding: 10px;
-    display: flex;
-    gap: 10px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  width: 100%;
+  background-color: #4caf50;
+  color: white;
+  position: sticky;
+  top: 80px; /* Header yüksekliği kadar boşluk */
+  z-index: 999; /* İçeriğin üstünde kalır */
+  display: flex; /* Flex düzeni kullanarak butonları hizalar */
+  justify-content: space-evenly; /* Butonlar arasında eşit boşluk */
+  align-items: center;
+  padding: 10px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+.hamburger-menu {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 10px;
+}
+
+.navbar-links button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar-links button:hover {
+  background-color: #45a049;
+}
+
+.navbar-links button:active {
+  background-color: #388e3c;
+}
+
+
+
+
+/* Navbar Butonları */
+#navbar button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover ve Aktif Durum */
+#navbar button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+#navbar button:active {
+  background-color: #388e3c;
+}
+
+/* Mobil Görünüm */
+@media (max-width: 768px) {
+  #navbar {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 10px;
   }
-  
+
   #navbar button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
+      width: 100%; /* Butonlar tam genişlik kaplar */
+      margin-bottom: 5px;
   }
-  
-  #navbar button:hover {
-    background-color: #0056b3;
+
+  .hamburger-menu {
+    display: block; /* Hamburger menüsü görünür */
   }
-  
-  /* Genel Sayfa Düzeni */
-  #main-container {
-    padding: 20px;
+
+  .navbar-links {
+    display: none; /* Varsayılan olarak gizli */
+    flex-direction: column;
+    background-color: #4caf50;
+    width: 100%;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
-  
+
+  .navbar-links.active {
+    display: flex; /* Menü aktifse görünür hale gelir */
+  }
+
+  .navbar-links button {
+    width: 100%; /* Butonlar tam genişlik kaplar */
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #388e3c;
+  }
+
+  .navbar-links button:last-child {
+    border-bottom: none;
+  }
+
+}

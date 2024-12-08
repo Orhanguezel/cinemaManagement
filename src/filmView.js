@@ -16,6 +16,7 @@ export function renderFilmView() {
 
   container.innerHTML = `
     <h2>Filmler</h2>
+    <button class="add-film-button"onclick="addFilm()">Yeni Film Ekle</button>
     <div class="film-cards">
       ${localFilms
         .map(
@@ -34,7 +35,7 @@ export function renderFilmView() {
         )
         .join("")}
     </div>
-    <button onclick="addFilm()">Yeni Film Ekle</button>
+    
   `;
 }
 

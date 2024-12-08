@@ -1,71 +1,70 @@
-.seats-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  margin: 10px 0;
+/* Koltuk Alanı */
+.seats-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); /* Daima 10 sütun */
+  gap: 10px; /* Koltuklar arası sabit boşluk */
+  justify-content: center;
+  margin: 20px auto; /* Ortalanmış görünüm */
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px; /* Alan genişliğini sınırlamak */
 }
 
-.seat-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.seat-row-label {
-  font-size: 16px;
-  font-weight: bold;
-  padding: 5px;
-  min-width: 20px;
-  text-align: center;
-}
-
+/* Koltuk */
 .seat {
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  aspect-ratio: 1 / 1; /* Kare yapıda kalır */
+  width: 100%; /* Grid hücresine uyum sağlar */
+  max-width: 50px; /* Maksimum genişlik */
+  border-radius: 5px;
+  font-size: 14px;
   font-weight: bold;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  text-align: center;
-  background-color: #f0f0f0;
-  box-sizing: border-box;
-}
-
-.seat.available {
-  background-color: green;
   color: white;
   cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
-.seat.occupied {
-  background-color: red;
+.seat.boş {
+  background-color: #4caf50;
+}
+
+.seat.dolu {
+  background-color: #f44336;
+}
+
+.seat:hover {
+  transform: scale(1.1); /* Hover etkisi */
+  opacity: 0.9;
+}
+
+/* Sahne */
+.stage {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px auto 10px;
+  padding: 10px;
+  background-color: #333;
   color: white;
+  border-radius: 5px;
+  max-width: 600px; /* Koltuk alanı genişliğiyle aynı */
 }
 
+/* Duyarlılık (Responsive Tasarım) */
 @media (max-width: 768px) {
   .seat {
-    width: 30px;
-    height: 30px;
-    font-size: 10px;
-  }
-
-  .seat-row-label {
-    font-size: 14px;
+    max-width: 40px; /* Orta ekranlarda koltuk boyutu küçülür */
+    font-size: 12px;
   }
 }
 
 @media (max-width: 480px) {
   .seat {
-    width: 25px;
-    height: 25px;
-    font-size: 8px;
-  }
-
-  .seat-row-label {
-    font-size: 12px;
+    max-width: 30px; /* Küçük ekranlar için */
+    font-size: 10px;
   }
 }

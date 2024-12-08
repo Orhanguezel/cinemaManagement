@@ -1,4 +1,3 @@
-
 /* Film Kartları */
 .film-cards {
   display: flex;
@@ -12,10 +11,10 @@
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 250px;
+  width: 300px;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .film-card:hover {
@@ -34,7 +33,7 @@
 }
 
 .film-card h3 {
-  font-size: 1.2em;
+  font-size: 1.4em;
   margin-bottom: 10px;
   color: #222;
 }
@@ -80,29 +79,11 @@ button.add-film-button:hover {
 /* Duyarlılık (Responsive) */
 @media (max-width: 768px) {
   .film-cards {
-    flex-direction: column;
-    align-items: center;
+      flex-direction: column;
+      align-items: center;
   }
 
   .film-card {
-    width: 90%;
-  }
-}
-
-@media (max-width: 480px) {
-  .film-card h3 {
-    font-size: 1em;
-  }
-
-  .film-card p {
-    font-size: 0.9em;
-  }
-
-  nav button {
-    font-size: 0.9em;
-  }
-
-  button.add-film-button {
-    font-size: 0.9em;
+      width: 90%;
   }
 }

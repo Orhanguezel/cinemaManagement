@@ -1,38 +1,29 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Header Konteyner */
+header {
+  background-color: #4caf50;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 2px solid #ddd;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0; /* Navbar ile hizalanması için herhangi bir boşluk eklenmedi */
+}
+
+/* Yönetim Paneli Başlığı */
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding-bottom: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  header h1 {
+    font-size: 1.5rem;
   }
-  
-  .header {
-    text-align: center;
-    background-color: #007bff;
-    padding: 10px;
-    color: white;
-  }
-  
-  .header-button {
-    margin: 5px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .admin-button {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .user-button {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .start-panel {
-    margin: 50px auto;
-    text-align: center;
-  }
-  
+}

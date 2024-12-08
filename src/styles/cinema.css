@@ -48,23 +48,14 @@
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
-  background-color: #007bff;
+  background-color: #4caf50;
   color: #fff;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .cinema-card button:hover {
-  background-color: #0056b3;
-}
-
-.cinema-card button + button {
-  margin-left: 10px;
-  background-color: #dc3545;
-}
-
-.cinema-card button + button:hover {
-  background-color: #c82333;
+  background-color: #45a049;
 }
 
 /* Yeni Sinema Ekle Butonu */
@@ -85,73 +76,14 @@ button.add-cinema-button:hover {
   background-color: #218838;
 }
 
-/* Form Alanları */
-form {
-  max-width: 600px;
-  margin: 20px auto;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-form label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #444;
-}
-
-form input,
-form textarea,
-form select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-form input[type="file"] {
-  padding: 5px;
-}
-
-form button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-form button:hover {
-  background-color: #0056b3;
-}
-
-form button + button {
-  background-color: #6c757d;
-  margin-left: 10px;
-}
-
-form button + button:hover {
-  background-color: #5a6268;
-}
-
 /* Duyarlılık (Responsive) */
 @media (max-width: 768px) {
   .cinema-cards {
-    flex-direction: column;
-    align-items: center;
+      flex-direction: column;
+      align-items: center;
   }
 
   .cinema-card {
-    width: 90%;
-  }
-
-  form {
-    width: 95%;
+      width: 90%;
   }
 }

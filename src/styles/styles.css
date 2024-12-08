@@ -1,46 +1,31 @@
-/* Genel Ayarlar */
+/* Genel Yapı */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9;
+  background-color: #f9f9f9;
   color: #333;
+  box-sizing: border-box;
 }
 
+/* Ana Konteyner */
+/* Ana İçerik */
+#main-content {
+  padding: 20px;
+  margin-top: 120px; /* Header ve Navbar toplam yüksekliği kadar boşluk eklendi */
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Sayfa Başlıkları */
 h2 {
   text-align: center;
-  margin: 20px 0;
-  color: #444;
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 20px;
 }
-
-/* Navbar */
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 10px 0;
-  background-color: #28a745;
-}
-
-nav button {
-  padding: 10px 20px;
-  font-size: 1em;
-  border: none;
-  border-radius: 5px;
-  background-color: #218838;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-nav button:hover {
-  background-color: #1e7e34;
-}
-
-nav button:active {
-  background-color: #155724;
-}
-
-
-
-

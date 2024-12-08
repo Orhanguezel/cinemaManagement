@@ -24,6 +24,7 @@ export function renderSalonView() {
 
   container.innerHTML = `
     <h2>Salonlar</h2>
+    <button class="add-salon-button" onclick="addSalon()">Yeni Salon Ekle</button>
     <div class="salon-cards">
       ${salons.map(salon => `
         <div class="salon-card">
@@ -44,7 +45,7 @@ export function renderSalonView() {
         </div>
       `).join("")}
     </div>
-    <button class="add-salon-button" onclick="addSalon()">Yeni Salon Ekle</button>
+   
   `;
 }
 
