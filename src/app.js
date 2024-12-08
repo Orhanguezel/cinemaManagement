@@ -1,6 +1,5 @@
 import { renderNavbar } from "./navbar.js";
 import { renderCinemaView } from "./cinemaView.js";
-import { renderSalonView } from "./salonView.js";
 
 // Uygulama başlatma
 document.addEventListener("DOMContentLoaded", () => {

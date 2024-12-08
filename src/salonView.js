@@ -1,5 +1,19 @@
-import { salons } from "./data/Salons.js";
-import { cinemas } from "./data/Cinemas.js";
+import { salons as defaultSalons } from "./data/Salons.js";
+import { 
+  loadSalonsFromLocalStorage, 
+  saveSalonsToLocalStorage, 
+  saveDataToLocalStorage,
+  saveStateToLocalStorage
+} from "./stateManager.js";
+
+
+
+// LocalStorage'dan verileri yükle
+let salons = loadSalonsFromLocalStorage();
+if (salons.length === 0) {
+  salons = [...defaultSalons]; // Varsayılan verileri kullan
+  saveSalonsToLocalStorage(salons); // LocalStorage'a kaydet
+}
 
 export function renderSalonView() {
   const container = document.getElementById("main-content");
@@ -20,140 +34,110 @@ export function renderSalonView() {
             <p>Genişlik: ${salon.aisleWidth} m</p>
             <p>Fiyat: ${salon.price} €</p>
             <p>Özellikler: 
-              ${salon.features.is3D ? "3D" : ""} 
-              ${salon.features.isVIP ? "VIP" : ""} 
-              ${salon.features.sound}
+              ${salon.features?.is3D ? "3D" : ""} 
+              ${salon.features?.isVIP ? "VIP" : ""} 
+              ${salon.features?.sound || "Ses sistemi belirtilmedi"}
             </p>
-            <p>Gösterim Saatleri: ${salon.showTimes.join(", ")}</p>
+            <p>Gösterim Saatleri: ${Array.isArray(salon.showTimes) ? salon.showTimes.join(", ") : "Veri bulunamadı"}</p>
             <button onclick="editSalon(${salon.type})">Düzenle</button>
-            <button onclick="deleteSalon(${salon.type})">Sil</button>
           </div>
         </div>
       `).join("")}
     </div>
     <button class="add-salon-button" onclick="addSalon()">Yeni Salon Ekle</button>
   `;
-
-  // Salonların düzenleme olaylarını ayarla
-  cinemas.forEach(cinema => {
-    if (Array.isArray(cinema.salons)) {
-      cinema.salons.forEach(salon => {
-        const editButton = document.querySelector(`button[onclick="editSalon(${salon.type})"]`);
-        if (editButton) {
-          editButton.onclick = () => showSalonEditForm(cinema, salon);
-        }
-      });
-    } else {
-      console.warn(`Cinema ID ${cinema.id} için salons bir dizi değil.`);
-    }
-  });
 }
 
+function renderSalonForm(salon = {}) {
+  const {
+    type = salons.length > 0 ? salons[salons.length - 1].type + 1 : 1, // Sıradaki tip numarası otomatik atanır
+    name = "",
+    image = "./assets/default-salon.png",
+    seats = "",
+    aisleWidth = "",
+    features = { is3D: false, isVIP: false, sound: "" },
+    price = "",
+    showTimes = [],
+  } = salon;
 
-export function editSalon(type) {
-  const salon = salons.find(salon => salon.type === type);
   const container = document.getElementById("main-content");
   container.innerHTML = `
-    <h2>${salon.name} Düzenleme</h2>
-    <form>
-      <label for="name">Salon Adı:</label>
-      <input type="text" id="name" value="${salon.name}" required>
-      
-      <label for="seats">Kapasite:</label>
-      <input type="number" id="seats" value="${salon.seats}" required>
-      
-      <label for="aisleWidth">Koltuk Genişliği:</label>
-      <input type="number" id="aisleWidth" value="${salon.aisleWidth}" required>
-      
-      <label for="price">Fiyat:</label>
-      <input type="number" id="price" value="${salon.price}" required>
-      
-      <button type="button" onclick="saveSalonChanges(${type})">Kaydet</button>
+    <h2>${salon.type ? "Salon Düzenleme" : "Yeni Salon Ekle"}</h2>
+    <form id="salon-form">
+      <label for="salon-name">Salon Adı:</label>
+      <input type="text" id="salon-name" value="${name}" required>
+
+      <label for="salon-image">Salon Görseli:</label>
+      <input type="file" id="salon-image" accept="image/*">
+      <img src="${image}" alt="${name}" class="salon-image-preview">
+
+      <label for="salon-seats">Kapasite:</label>
+      <input type="number" id="salon-seats" value="${seats}" required>
+
+      <label for="salon-aisleWidth">Koltuk Aralığı (m):</label>
+      <input type="number" id="salon-aisleWidth" value="${aisleWidth}" required>
+
+      <label for="salon-features">Özellikler:</label>
+      <div>
+        <input type="checkbox" id="salon-is3D" ${features.is3D ? "checked" : ""}> <label for="salon-is3D">3D</label>
+        <input type="checkbox" id="salon-isVIP" ${features.isVIP ? "checked" : ""}> <label for="salon-isVIP">VIP</label>
+      </div>
+
+      <label for="salon-sound">Ses Sistemi:</label>
+      <input type="text" id="salon-sound" value="${features.sound}" required>
+
+      <label for="salon-price">Fiyat:</label>
+      <input type="number" id="salon-price" value="${price}" required>
+
+      <label for="salon-showTimes">Gösterim Saatleri:</label>
+      <input type="text" id="salon-showTimes" value="${showTimes.join(", ")}">
+
+      <button type="button" id="save-salon-button">${salon.type ? "Kaydet" : "Oluştur"}</button>
     </form>
     <button onclick="renderSalonView()">Geri</button>
   `;
+
+  document.getElementById("save-salon-button").onclick = () => {
+    salon.type ? saveSalonChanges(salon.type) : saveNewSalon();
+  };
 }
 
-export function saveSalonChanges(type) {
-  const name = document.getElementById("name").value;
-  const seats = parseInt(document.getElementById("seats").value, 10);
-  const aisleWidth = parseInt(document.getElementById("aisleWidth").value, 10);
-  const price = parseFloat(document.getElementById("price").value);
-
-  const salonIndex = salons.findIndex(salon => salon.type === type);
-  if (salonIndex !== -1) {
-    salons[salonIndex].name = name;
-    salons[salonIndex].seats = seats;
-    salons[salonIndex].aisleWidth = aisleWidth;
-    salons[salonIndex].price = price;
-
-    alert("Değişiklikler kaydedildi!");
-    renderSalonView();
-  }
-}
-
-
-export function deleteSalon(type) {
-  const confirmation = confirm("Bu salonu silmek istediğinizden emin misiniz?");
-  if (confirmation) {
-    const index = salons.findIndex(salon => salon.type === type);
-    if (index !== -1) {
-      salons.splice(index, 1);
-      alert("Salon başarıyla silindi!");
-      renderSalonView();
-    }
-  }
-}
 
 
 export function addSalon() {
-  const container = document.getElementById("main-content");
-  container.innerHTML = `
-    <h2>Yeni Salon Ekle</h2>
-    <form id="add-salon-form">
-      <label for="name">Salon Adı:</label>
-      <input type="text" id="name" placeholder="Salon Adı" required>
-      
-      <label for="image">Salon Görseli:</label>
-      <input type="file" id="image" accept="image/*">
-      
-      <label for="seats">Kapasite:</label>
-      <input type="number" id="seats" placeholder="Koltuk Sayısı" required>
-      
-      <label for="aisleWidth">Koltuk Genişliği:</label>
-      <input type="number" id="aisleWidth" placeholder="Koltuk Genişliği (m)" required>
-      
-      <label for="features">Özellikler:</label>
-      <div>
-        <input type="checkbox" id="is3D"> 3D
-        <input type="checkbox" id="isVIP"> VIP
-      </div>
-      
-      <label for="sound">Ses Sistemi:</label>
-      <input type="text" id="sound" placeholder="Ses Sistemi (örn. Dolby Atmos)" required>
-      
-      <label for="price">Fiyat:</label>
-      <input type="number" id="price" placeholder="Bilet Fiyatı (€)" required>
-      
-      <label for="showTimes">Gösterim Saatleri:</label>
-      <input type="text" id="showTimes" placeholder="Gösterim Saatleri (virgülle ayrılmış)">
-      
-      <button type="button" onclick="saveNewSalon()">Kaydet</button>
-    </form>
-    <button onclick="renderSalonView()">Geri</button>
-  `;
+  renderSalonForm(); // Yeni salon ekleme formu
 }
 
+export function editSalon(type) {
+  const salon = salons.find(salon => salon.type === type);
+  if (salon) {
+    renderSalonForm(salon);
+  } else {
+    console.warn(`Salon Tipi ${type} bulunamadı.`);
+  }
+}
+
+
+
+
 export function saveNewSalon() {
-  const name = document.getElementById("name").value;
-  const imageInput = document.getElementById("image");
-  const seats = parseInt(document.getElementById("seats").value, 10);
-  const aisleWidth = parseInt(document.getElementById("aisleWidth").value, 10);
-  const is3D = document.getElementById("is3D").checked;
-  const isVIP = document.getElementById("isVIP").checked;
-  const sound = document.getElementById("sound").value;
-  const price = parseFloat(document.getElementById("price").value);
-  const showTimes = document.getElementById("showTimes").value.split(",").map(time => time.trim());
+  const nameInput = document.getElementById("salon-name");
+  if (!nameInput) {
+    console.error("Salon formundaki 'Salon Adı' alanı bulunamadı.");
+    return;
+  }
+  
+  const name = nameInput.value;
+  const imageInput = document.getElementById("salon-image");
+  const seats = parseInt(document.getElementById("salon-seats").value, 10);
+  const aisleWidth = parseInt(document.getElementById("salon-aisleWidth").value, 10);
+  const is3D = document.getElementById("salon-is3D").checked;
+  const isVIP = document.getElementById("salon-isVIP").checked;
+  const sound = document.getElementById("salon-sound").value;
+  const price = parseFloat(document.getElementById("salon-price").value);
+  const showTimes = Array.from(document.querySelectorAll(".showTimeInput"))
+    .map(input => input.value)
+    .filter(time => time !== "");
 
   let image = "./assets/default-salon.png";
   if (imageInput.files && imageInput.files[0]) {
@@ -161,37 +145,116 @@ export function saveNewSalon() {
     image = URL.createObjectURL(file);
   }
 
-  const newSalon = new Salon(
-    salons.length + 1,
+  const newSalon = {
+    type: salons.length > 0 ? salons[salons.length - 1].type + 1 : 1,
     name,
     image,
     seats,
     aisleWidth,
-    { is3D, isVIP, sound },
+    features: { is3D, isVIP, sound },
     price,
-    showTimes
-  );
+    showTimes,
+  };
 
   salons.push(newSalon);
 
-  // İlk sinemaya salonu ekleyin (örnek amaçlı)
-  if (cinemas[0] && Array.isArray(cinemas[0].salons)) {
-    cinemas[0].salons.push(newSalon);
-  } else {
-    console.warn("Sinemaya salon eklenemedi.");
-  }
+  // LocalStorage'a kaydet
+  saveDataToLocalStorage("salons", salons);
 
-  alert("Yeni salon başarıyla eklendi!");
+  alert("Salon başarıyla kaydedildi!");
   renderSalonView();
 }
 
 
 
-window.renderSalonView = renderSalonView;
+
+export function deleteSalon(type) {
+  if (confirm("Bu salonu silmek istediğinizden emin misiniz?")) {
+    const salonIndex = salons.findIndex((salon) => salon.type === type);
+    if (salonIndex !== -1) {
+      salons.splice(salonIndex, 1);
+
+      // LocalStorage'a güncel veri yaz
+      saveDataToLocalStorage("salons", salons);
+
+      alert("Salon başarıyla silindi!");
+      renderSalonView();
+    } else {
+      console.warn(`Salon Tipi ${type} bulunamadı.`);
+    }
+  }
+}
+
+
+export function saveSalonChanges(type) {
+  const salonIndex = salons.findIndex(salon => salon.type === type);
+  if (salonIndex !== -1) {
+    const name = document.getElementById("name").value;
+    const seats = parseInt(document.getElementById("seats").value, 10);
+    const aisleWidth = parseInt(document.getElementById("aisleWidth").value, 10);
+    const is3D = document.getElementById("is3D").checked;
+    const isVIP = document.getElementById("isVIP").checked;
+    const sound = document.getElementById("sound").value;
+    const price = parseFloat(document.getElementById("price").value);
+    const showTimes = document.getElementById("showTimes").value.split(",").map(time => time.trim());
+
+    salons[salonIndex] = {
+      ...salons[salonIndex],
+      name,
+      seats,
+      aisleWidth,
+      features: { is3D, isVIP, sound },
+      price,
+      showTimes
+    };
+
+    // LocalStorage'a kaydet
+    saveSalonsToLocalStorage(salons);
+
+    alert("Salon güncellendi!");
+    renderSalonView();
+  } else {
+    console.warn(`Salon Tipi ${type} bulunamadı.`);
+  }
+}
+
+
+// Yeni başlangıç verileri
+const initialCinemas = [];
+const initialFilms = [];
+const initialSalons = [];
+
+export function resetAndInitializeData() {
+  // LocalStorage'ı temizle
+  clearLocalStorage();
+
+  // Başlangıç verilerini ayarla
+  initializeAppState(initialCinemas, initialFilms, initialSalons);
+
+  // Durumu kaydet
+  saveStateToLocalStorage();
+
+  console.log("LocalStorage sıfırlandı ve başlangıç verileri eklendi.");
+}
+
+export function renderResetButton() {
+  const navbar = document.getElementById("navbar");
+  const resetButton = document.createElement("button");
+  resetButton.textContent = "Sıfırla";
+  resetButton.onclick = resetAndInitializeData;
+  navbar.appendChild(resetButton);
+}
+
+
+
+
+
+// Global fonksiyonları tanımlayın
 window.addSalon = addSalon;
-window.saveNewSalon = saveNewSalon;
 window.editSalon = editSalon;
-window.saveSalonChanges = saveSalonChanges;
 window.deleteSalon = deleteSalon;
+window.saveNewSalon = saveNewSalon;
+window.saveSalonChanges = saveSalonChanges;
+window.renderSalonView = renderSalonView;
 
 

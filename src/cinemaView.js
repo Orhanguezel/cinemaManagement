@@ -1,34 +1,59 @@
+import { cinemas as defaultCinemas } from "./data/Cinemas.js";
 import { salons } from "./data/Salons.js";
-import { saveCinemasToLocalStorage, loadCinemasFromLocalStorage } from "./stateManager.js";
-import { Cinema } from "./data/Cinemas.js";
+import { loadCinemasFromLocalStorage, saveCinemasToLocalStorage } from "./stateManager.js";
+
+
+
 
 
 // Sinemalar LocalStorage'dan yükleniyor
-let cinemas = loadCinemasFromLocalStorage();
 let logo = "./assets/default-logo.png";
 let background = "./assets/default-background.png";
 
+let cinemas = loadCinemasFromLocalStorage();
+if (cinemas.length === 0) {
+  cinemas = [...defaultCinemas]; // Varsayılan verileri kullan
+  saveCinemasToLocalStorage(cinemas); // LocalStorage'a kaydet
+}
+
 export function renderCinemaView() {
   const container = document.getElementById("main-content");
+  if (!container) {
+    console.error("Ana içerik bölgesi bulunamadı!");
+    return;
+  }
+
+  if (cinemas.length === 0) {
+    container.innerHTML = "<p>Sinema bilgisi bulunamadı. Yeni bir sinema eklemek için aşağıdaki butona tıklayın.</p>";
+    return;
+  }
+
   container.innerHTML = `
     <h2>Sinemalar</h2>
     <div class="cinema-cards">
-      ${cinemas.map(cinema => `
+      ${cinemas
+        .map(
+          (cinema) => `
         <div class="cinema-card">
-          <img src="${cinema.logo}" alt="${cinema.name}" class="cinema-logo">
+          <img src="${cinema.logo || './assets/default-logo.png'}" alt="${cinema.name}" class="cinema-logo">
           <div class="cinema-info">
             <h3>${cinema.name}</h3>
-            <p>${cinema.address}</p>
-            <p>${cinema.description}</p>
+            <p>Adres: ${cinema.address}</p>
+            <p>Açıklama: ${cinema.description || "Açıklama yok"}</p>
+            <p>Telefon: ${cinema.phone || "Belirtilmemiş"}</p>
+            <p>Email: ${cinema.email || "Belirtilmemiş"}</p>
             <button onclick="editCinema(${cinema.id})">Düzenle</button>
             <button onclick="deleteCinema(${cinema.id})">Sil</button>
           </div>
         </div>
-      `).join("")}
+      `
+        )
+        .join("")}
     </div>
     <button class="add-cinema-button" onclick="addCinema()">Yeni Sinema Ekle</button>
   `;
 }
+
 
 
 export function saveCinemaChanges(cinemaId) {
@@ -262,13 +287,13 @@ function convertFileToBase64(file) {
 
 
 
-
-// Global hale getirme
 // Global hale getirme
 window.editCinema = editCinema;
 window.renderCinemaView = renderCinemaView;
 window.saveCinemaChanges = saveCinemaChanges;
 window.showCinemaEditForm = showCinemaEditForm;;
 window.deleteCinema = deleteCinema;
+window.addCinema = addCinema;
+
 
 

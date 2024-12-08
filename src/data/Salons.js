@@ -1,4 +1,4 @@
-// Salon Sınıfı
+// Salons.js
 export class Salon {
   constructor(type, name, image, seats, aisleWidth, features, price, showTimes) {
     this.type = type;
@@ -8,8 +8,7 @@ export class Salon {
     this.aisleWidth = aisleWidth;
     this.features = features; // Örn: { is3D: true, isVIP: false, sound: "Dolby Atmos" }
     this.price = price;
-    this.showTimes = showTimes; // Gösterim saatleri (Array)
-    this.filmId = this.filmId || null; // Film ID'si (Varsa)
+    this.showTimes = showTimes;
   }
 }
 
