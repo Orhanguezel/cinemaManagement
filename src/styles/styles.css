@@ -1,81 +1,46 @@
-/* Kartların genel düzeni */
-.cinema-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.cinema-card {
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  width: 300px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.cinema-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.cinema-logo {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 15px;
-}
-
-.cinema-info h3 {
-  font-size: 1.5em;
+/* Genel Ayarlar */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
   color: #333;
 }
 
-.cinema-info p {
-  font-size: 1em;
-  color: #666;
-  margin: 5px 0;
+h2 {
+  text-align: center;
+  margin: 20px 0;
+  color: #444;
 }
 
-.cinema-card button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 1em;
-}
-
-.cinema-card button:hover {
-  background-color: #0056b3;
-}
-
-.add-cinema-button {
-  display: block;
-  margin: 20px auto;
-  padding: 15px 25px;
+/* Navbar */
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 0;
   background-color: #28a745;
-  color: white;
+}
+
+nav button {
+  padding: 10px 20px;
+  font-size: 1em;
   border: none;
   border-radius: 5px;
-  font-size: 1.2em;
-  cursor: pointer;
-}
-
-.add-cinema-button:hover {
   background-color: #218838;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+nav button:hover {
+  background-color: #1e7e34;
+}
+
+nav button:active {
+  background-color: #155724;
 }
 
 
-.cinema-logo-preview {
-  width: 100px;
-  height: auto;
-  margin-top: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+
+

@@ -1,108 +1,108 @@
-.film-list {
+
+/* Film Kartları */
+.film-cards {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
-  justify-content: center;
-}
-
-.film-item {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
-  width: 200px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-
-.film-item img {
-  max-width: 100%;
-  border-radius: 4px;
-}
-
-.assign-button {
-  margin-top: 10px;
-  padding: 5px 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.assign-button:hover {
-  background-color: #0056b3;
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background: #fff;
   padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  max-width: 400px;
-  width: 100%;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-}
-
-.modal-buttons button {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#confirm-assign {
-  background-color: #28a745;
-  color: #fff;
-}
-
-#cancel-assign {
-  background-color: #dc3545;
-  color: #fff;
-}
-
-.button-container {
-  display: flex;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.atama-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
 }
 
 .film-card {
-  border: 1px solid #ddd;
+  background-color: #fff;
   border-radius: 10px;
-  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 250px;
   text-align: center;
-  width: 200px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.film-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .film-card img {
   width: 100%;
-  border-radius: 10px 10px 0 0;
+  height: auto;
+  border-bottom: 2px solid #ddd;
 }
 
+.film-card .film-info {
+  padding: 15px;
+}
+
+.film-card h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.film-card p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.film-card button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.film-card button:hover {
+  background-color: #0056b3;
+}
+
+/* Yeni Film Ekle Butonu */
+button.add-film-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.add-film-button:hover {
+  background-color: #218838;
+}
+
+/* Duyarlılık (Responsive) */
+@media (max-width: 768px) {
+  .film-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .film-card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .film-card h3 {
+    font-size: 1em;
+  }
+
+  .film-card p {
+    font-size: 0.9em;
+  }
+
+  nav button {
+    font-size: 0.9em;
+  }
+
+  button.add-film-button {
+    font-size: 0.9em;
+  }
+}
