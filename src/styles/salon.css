@@ -51,7 +51,7 @@
   margin-bottom: 10px;
 }
 
-button.add-salon-button {
+button.add-salon-button, button.update-salon-button {
   display: block;
   margin: 20px auto;
   padding: 10px 20px;

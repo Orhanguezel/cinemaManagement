@@ -40,7 +40,7 @@ export function renderSalonView() {
               ${salon.features?.sound || "Ses sistemi belirtilmedi"}
             </p>
             <p>Gösterim Saatleri: ${Array.isArray(salon.showTimes) ? salon.showTimes.join(", ") : "Veri bulunamadı"}</p>
-            <button onclick="editSalon(${salon.type})">Düzenle</button>
+            <button class="update-salon-button onclick="editSalon(${salon.type})">Düzenle</button>
           </div>
         </div>
       `).join("")}

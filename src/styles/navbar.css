@@ -4,10 +4,10 @@
   background-color: #4caf50;
   color: white;
   position: sticky;
-  top: 80px; /* Header yüksekliği kadar boşluk */
-  z-index: 999; /* İçeriğin üstünde kalır */
-  display: flex; /* Flex düzeni kullanarak butonları hizalar */
-  justify-content: space-evenly; /* Butonlar arasında eşit boşluk */
+  top: 80px; 
+  z-index: 999; 
+  display: flex; 
+  justify-content: space-evenly; 
   align-items: center;
   padding: 10px 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -83,32 +83,33 @@
   }
 
   #navbar button {
-      width: 100%; /* Butonlar tam genişlik kaplar */
+      width: 100%; 
       margin-bottom: 5px;
   }
 
   .hamburger-menu {
-    display: block; /* Hamburger menüsü görünür */
+    display: block; 
   }
 
   .navbar-links {
-    display: none; /* Varsayılan olarak gizli */
+    display: none; 
     flex-direction: column;
     background-color: #4caf50;
     width: 100%;
     position: absolute;
-    top: 70px;
+    top: 60px;
     left: 0;
-    padding: 10px 0;
+    padding: 10px 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
   }
 
   .navbar-links.active {
-    display: flex; /* Menü aktifse görünür hale gelir */
+    display: flex; 
   }
 
   .navbar-links button {
-    width: 100%; /* Butonlar tam genişlik kaplar */
+    width: 100%; 
     text-align: left;
     padding: 10px;
     border-bottom: 1px solid #388e3c;

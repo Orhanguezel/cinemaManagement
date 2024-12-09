@@ -12,7 +12,7 @@ body {
 /* Ana İçerik */
 #main-content {
   padding: 20px;
-  margin-top: 120px; /* Header ve Navbar toplam yüksekliği kadar boşluk eklendi */
+  margin-top: 120px; 
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;

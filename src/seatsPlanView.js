@@ -1,6 +1,4 @@
 import { 
-  loadSeatsFromLocalStorage, 
-  saveSeatsToLocalStorage,
   saveCinemasToLocalStorage,
   loadCinemasFromLocalStorage
  } from "./stateManager.js";

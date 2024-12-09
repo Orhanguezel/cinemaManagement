@@ -1,18 +1,17 @@
+// Kampanyaları yükleme veya başlatma
 import { initializeCampaigns, saveCampaignsToLocalStorage, loadCampaignsFromLocalStorage } from "./stateManager.js";
 import { defaultCampaigns } from "./data/Campaigns.js"; // Varsayılan kampanyalar dosyası
 
-// Kampanyaları yükleme veya başlatma
 let campaigns = loadCampaignsFromLocalStorage();
 if (campaigns.length === 0) {
-  campaigns = [...defaultCampaigns]; // Eğer localStorage boşsa varsayılan kampanyaları kullan
-  initializeCampaigns(campaigns); // Kampanyaları başlat ve kaydet
+  campaigns = [...defaultCampaigns];
+  initializeCampaigns(campaigns);
 }
 
 // Kampanya Görünümü Render Fonksiyonu
 export function renderCampaignView() {
   const container = document.getElementById("main-content");
 
-  // Kampanya Listesi ve Form
   container.innerHTML = `
     <h2>İndirimler ve Kampanyalar</h2>
     <div class="campaign-section">
@@ -56,51 +55,115 @@ export function renderCampaignView() {
     </div>
   `;
 
-  // Kampanya tablo güncellemesi
   document.getElementById("campaign-table").innerHTML = renderCampaignTable();
 }
 
 // Kampanya Tablosu
 function renderCampaignTable() {
-    return `
-      <table>
-        <thead>
+  return `
+    <table>
+      <thead>
+        <tr>
+          <th>Adı</th>
+          <th>Hedef Kitle</th>
+          <th>İndirim</th>
+          <th>Geçerlilik</th>
+          <th>Durum</th>
+          <th>Aksiyon</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${campaigns
+          .map(
+            (campaign) => `
           <tr>
-            <th>Adı</th>
-            <th>Hedef Kitle</th>
-            <th>İndirim</th>
-            <th>Geçerlilik</th>
-            <th>Durum</th>
-            <th>Aksiyon</th>
+            <td>${campaign.name || "Bilinmiyor"}</td>
+            <td>${(campaign.targetAudience || []).join(", ")}</td>
+            <td>${campaign.discountValue || 0} ${
+              campaign.discountType === "percentage" ? "%" : "€"
+            }</td>
+            <td>${campaign.startDate || "Belirtilmemiş"} - ${campaign.endDate || "Belirtilmemiş"}</td>
+            <td>${campaign.status || "Aktif"}</td>
+            <td>
+              <button onclick="editCampaign(${campaign.id})">Düzenle</button>
+  <button class="delete" onclick="deleteCampaign(${campaign.id})">Sil</button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          ${campaigns
-            .map(
-              (campaign) => `
-            <tr>
-              <td>${campaign.name || "Bilinmiyor"}</td>
-              <td>${(campaign.targetAudience || []).join(", ")}</td>
-              <td>${campaign.discountValue || 0} ${
-                campaign.discountType === "percentage" ? "%" : "€"
-              }</td>
-              <td>${campaign.startDate || "Belirtilmemiş"} - ${campaign.endDate || "Belirtilmemiş"}</td>
-              <td>${campaign.status || "Aktif"}</td>
-              <td>
-                <button onclick="editCampaign(${campaign.id})">Düzenle</button>
-                <button onclick="deleteCampaign(${campaign.id})">Sil</button>
-              </td>
-            </tr>
-          `
-            )
-            .join("")}
-        </tbody>
-      </table>
-    `;
+        `
+          )
+          .join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+// Kampanya Düzenleme Fonksiyonu
+export function editCampaign(id) {
+    // Kampanyayı id'ye göre bul
+    const campaignToEdit = campaigns.find((campaign) => campaign.id === id);
+  
+    if (campaignToEdit) {
+      // Form alanlarına kampanya verilerini yerleştir
+      document.getElementById("campaign-name").value = campaignToEdit.name;
+      const audienceOptions = Array.from(document.getElementById("campaign-audience").options);
+      audienceOptions.forEach((option) => {
+        option.selected = campaignToEdit.targetAudience.includes(option.value);
+      });
+      document.getElementById("discount-type").value = campaignToEdit.discountType;
+      document.getElementById("discount-value").value = campaignToEdit.discountValue;
+      document.getElementById("start-date").value = campaignToEdit.startDate;
+      document.getElementById("end-date").value = campaignToEdit.endDate;
+  
+      // Düzenleme işlemi için bir kaydetme düğmesi
+      const saveButton = document.createElement("button");
+      saveButton.textContent = "Güncelle";
+      saveButton.classList.add("update-campaign-btn");
+      saveButton.onclick = () => updateCampaign(id);
+  
+      // Mevcut Kaydet düğmesini yeni Güncelle düğmesi ile değiştir
+      const form = document.getElementById("campaign-form");
+      const oldSaveButton = form.querySelector("button[type='button']");
+      if (oldSaveButton) {
+        form.replaceChild(saveButton, oldSaveButton);
+      }
+    }
   }
   
 
-// Kampanya Ekleme Fonksiyonu
+// Kampanya Güncelleme Fonksiyonu
+export function updateCampaign(id) {
+    // Formdan yeni değerleri al
+    const updatedName = document.getElementById("campaign-name").value;
+    const updatedAudience = Array.from(document.getElementById("campaign-audience").selectedOptions).map(
+      (option) => option.value
+    );
+    const updatedDiscountType = document.getElementById("discount-type").value;
+    const updatedDiscountValue = parseFloat(document.getElementById("discount-value").value);
+    const updatedStartDate = document.getElementById("start-date").value;
+    const updatedEndDate = document.getElementById("end-date").value;
+  
+    // Kampanyayı güncelle
+    const campaignIndex = campaigns.findIndex((campaign) => campaign.id === id);
+    if (campaignIndex !== -1) {
+      campaigns[campaignIndex] = {
+        ...campaigns[campaignIndex],
+        name: updatedName,
+        targetAudience: updatedAudience,
+        discountType: updatedDiscountType,
+        discountValue: updatedDiscountValue,
+        startDate: updatedStartDate,
+        endDate: updatedEndDate,
+      };
+  
+      // LocalStorage'a kaydet ve görünümü yenile
+      saveCampaignsToLocalStorage(campaigns);
+      alert("Kampanya başarıyla güncellendi!");
+      renderCampaignView();
+    }
+  }
+  
+
+// Kampanya Ekleme ve Silme Fonksiyonları
 export function addCampaign() {
   const name = document.getElementById("campaign-name").value;
   const audience = Array.from(document.getElementById("campaign-audience").selectedOptions).map(
@@ -129,7 +192,6 @@ export function addCampaign() {
   renderCampaignView();
 }
 
-// Kampanya Silme Fonksiyonu
 export function deleteCampaign(id) {
   campaigns = campaigns.filter((campaign) => campaign.id !== id);
   saveCampaignsToLocalStorage(campaigns);
@@ -137,3 +199,10 @@ export function deleteCampaign(id) {
   alert("Kampanya başarıyla silindi!");
   renderCampaignView();
 }
+
+// Fonksiyonları window nesnesine ekleme
+window.deleteCampaign = deleteCampaign;
+window.addCampaign = addCampaign;
+window.editCampaign = editCampaign;
+window.renderCampaignView = renderCampaignView;
+window.updateCampaign = updateCampaign;

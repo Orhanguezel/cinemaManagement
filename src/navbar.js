@@ -6,7 +6,6 @@ import { renderFilmView } from "./filmView.js";
 import { renderShowtimeView } from "./showtimeView.js";
 import { renderSeatPlanView } from "./seatsPlanView.js";
 import { renderCampaignView } from "./campaignView.js";
-import { renderAnalysisView } from "./analysisView.js";
 import { resetData } from "./stateManager.js";
 
 
@@ -23,7 +22,6 @@ export function renderNavbar() {
         <button id="showtime-tab">Gösterimler</button>
         <button id="seat-plan-tab">Koltuk Yerleşimi</button>
         <button id="campaign-tab">Kampanyalar</button>
-        <button id="analysis-tab">Analiz</button>
         <button id="reset-data-tab">Reset</button>
       </div>
     </div>
@@ -46,6 +44,5 @@ export function renderNavbar() {
   document.getElementById("showtime-tab").onclick = () => renderShowtimeView();
   document.getElementById("seat-plan-tab").onclick = () => renderSeatPlanView();
   document.getElementById("campaign-tab").onclick = () => renderCampaignView();
-  document.getElementById("analysis-tab").onclick = () => renderAnalysisView();
   document.getElementById("reset-data-tab").onclick = () => resetData();
 }
